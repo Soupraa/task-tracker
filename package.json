@@ -1,0 +1,36 @@
+{
+  "name": "task-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "electron": "electron .",
+    "electron-dev": "concurrently -k \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-build": "npm run build && electron-builder"
+  },
+  "dependencies": {
+    "next": "15.3.1",
+    "react": "^19.0.0",
+    "react-dnd": "^16.0.1",
+    "react-dnd-html5-backend": "^16.0.1",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "concurrently": "^9.1.2",
+    "electron": "^35.2.0",
+    "electron-is-dev": "^3.0.1",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.1",
+    "tailwindcss": "^4",
+    "wait-on": "^8.0.3"
+  },
+  "files": [
+    "main.js",
+    "out/**/*"
+  ]
+}
