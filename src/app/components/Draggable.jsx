@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function Draggable({ id, children, onDragEnd }) {
+export default function Draggable({ id, children, onDragEnd, title}) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleDragStart = (e) => {
@@ -32,6 +32,7 @@ export default function Draggable({ id, children, onDragEnd }) {
         userSelect: 'none',
       }}
     >
+      <h3 className="text-2xl font-jersey">{title}</h3>
       {children}
     </div>
   );
