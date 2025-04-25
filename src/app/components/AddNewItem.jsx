@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import useTaskStore from "../store/useTaskStore";
+import { COLUMNS } from "./constants";
 
 export default function AddNewItem() {
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
-  const [nameError, setNameError] = useState("");
+  const [titleError, setTitleError] = useState("");
   const [description, setDescription] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [activeColumn, setActiveColumn] = useState(COLUMNS.TODO);
+  const { addTask } = useTaskStore();
 
   const openModal = () => {
-    setNameError("");
+    setTitleError("");
     setTitle("");
+    setActiveColumn(COLUMNS.TODO);
     modalRef.current?.showModal();
   };
 
@@ -16,7 +22,19 @@ export default function AddNewItem() {
     modalRef.current?.close();
   };
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    //validation
+    if (!title.trim()) {
+      setTitleError("Title is required.");
+      return;
+    }
+    console.log(title, description);
+    await addTask(activeColumn, title, description);
+    closeModal();
+  };
+
   return (
     <div>
       <button
@@ -29,7 +47,7 @@ export default function AddNewItem() {
       <dialog
         ref={modalRef}
         id="my_modal_2"
-        className="text-black m-auto rounded-md w-96"
+        className="text-black m-auto rounded-md w-96 min-w-fit"
       >
         <div className="modal-box h-[680px] max-w-2xl p-12">
           <h1 className="text-3xl font-jersey mb-9">Add new task</h1>
@@ -40,23 +58,38 @@ export default function AddNewItem() {
               name="name"
               type="text"
               placeholder="Title"
-              className="w-full bg-slate-100 rounded-2xl mt-2 h-10 p-2"
+              className="w-full bg-slate-100 rounded-xl mt-2 h-10 p-2"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
-            {nameError && (
-              <p className="text-red-500 text-sm my-2">{nameError}</p>
+            {titleError && (
+              <p className="text-red-500 text-sm my-2">{titleError}</p>
             )}
             <div className="mb-5" />
+            <label className="text-sm font-semibold tracking-wide">
+              Description
+            </label>
             <textarea
               name="description"
               placeholder="Description"
-              className="w-full bg-slate-100 rounded-2xl mt-2 h-40 p-2"
+              className="w-full bg-slate-100 rounded-xl mt-2 h-40 p-2 font-inter"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
             <div className="mb-5" />
-
+            <label className="text-sm font-semibold tracking-wide">
+              Status
+            </label>
+            <select
+              value={activeColumn}
+              onChange={(e) => setActiveColumn(e.target.value)}
+              className="p-2 border rounded-xl w-full bg-slate-100 mt-2"
+            >
+              <option value="todo">To Do</option>
+              <option value="progress">In Progress</option>
+              <option value="done">Done</option>
+            </select>
+            <div className="mb-5" />
             <div className="flex justify-center gap-3 text-xl">
               <button
                 className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all"

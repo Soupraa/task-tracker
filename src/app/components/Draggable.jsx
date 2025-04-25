@@ -21,7 +21,7 @@ export default function Draggable({ id, children, onDragEnd, title}) {
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      className='cursor-grab p-4 m-2 bg-amber-100 border-2 rounded-b-lg'
+      className='cursor-grab p-4 m-2 bg-amber-100 border-2 rounded-b-lg font-inter'
       style={{
         boxShadow: isDragging 
           ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'

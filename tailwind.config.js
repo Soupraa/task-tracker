@@ -12,7 +12,8 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', ...fontFamily.sans],
         mono: ['var(--font-geist-mono)', ...fontFamily.mono],
-        jersey: ['var(--font-jersey)', ...fontFamily.jersey], // Explicit fallback
+        jersey: ['var(--font-jersey)', ...fontFamily.jersey], 
+        inter: ['var(--font-inter)', ...fontFamily.inter]
       },
     },
   },
