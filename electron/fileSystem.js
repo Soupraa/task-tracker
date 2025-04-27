@@ -34,27 +34,77 @@ const getSavePath = () => {
   }
   return path.join(userDataPath, "tasks.json");
 
-//   return path.join('data/data.json', "tasks.json");
+  //   return path.join('data/data.json', "tasks.json");
 };
 
-const saveTasks = (data) => {
-  console.log(data);
+const saveTasks = (dashboardData, columnData) => {
   try {
-    let sData = JSON.stringify(data);
+    // console.log("in FS", dashboardId, title, data);
+    // 1. Load existing data (or initialize if empty)
+    let allDashboards = [];
+    if (fs.existsSync(getSavePath())) {
+      const fileData = fs.readFileSync(getSavePath(), "utf8");
+      allDashboards = JSON.parse(fileData);
+      if (!Array.isArray(allDashboards)) {
+        throw new Error("Invalid data format - expected array");
+      }
+    }
 
-    fs.writeFileSync(getSavePath(), sData);
-    console.log("data saved");
+    // 2. Validate input structure
+    if (
+      !columnData ||
+      !Array.isArray(columnData.todo) ||
+      !Array.isArray(columnData.progress) ||
+      !Array.isArray(columnData.done)
+    ) {
+      throw new Error("Invalid data structure provided");
+    }
+
+    // 3. Find and update specific dashboard
+    const dashboardIndex = allDashboards.findIndex((d) => d.id === dashboardData.id);
+    // console.log(data);
+    const updatedDashboard = {
+      id: dashboardData.id,
+      title: dashboardData.title,
+      todo: [...columnData.todo],
+      progress: [...columnData.progress],
+      done: [...columnData.done],
+      updatedAt: new Date().toISOString(),
+    };
+
+    if (dashboardIndex >= 0) {
+      // Update existing dashboard
+      allDashboards[dashboardIndex] = updatedDashboard;
+    } else {
+      // Add new dashboard
+      allDashboards.push(updatedDashboard);
+    }
+
+    // 4. Save the complete data back to file
+    fs.writeFileSync(getSavePath(), JSON.stringify(allDashboards, null, 2));
+    console.log(`Dashboard ${dashboardData.id} saved successfully`);
     return true;
   } catch (error) {
-    // Fallback to empty data if corrupted
-    // const fallback = JSON.stringify({ todo: [], progress: [], done: [] });
-    // fs.writeFileSync(getSavePath(), fallback);
-    console.error("Save failed, reset to empty:", error);
+    console.error("Save failed:", error);
+
+    // 5. Emergency fallback
+    try {
+      const fallbackData = fs.existsSync(getSavePath())
+        ? JSON.parse(fs.readFileSync(getSavePath(), "utf8"))
+        : [];
+
+      if (Array.isArray(fallbackData)) {
+        fs.writeFileSync(getSavePath(), JSON.stringify(fallbackData, null, 2));
+      }
+    } catch (fallbackError) {
+      console.error("Fallback save failed:", fallbackError);
+    }
+
     return false;
   }
-
 };
 
+//get the all dashboards tasks
 const loadTasks = () => {
   try {
     // Check if file exists first
@@ -65,14 +115,16 @@ const loadTasks = () => {
 
     const data = fs.readFileSync(getSavePath(), "utf8");
     const parsed = JSON.parse(data);
-    console.log(parsed);
-    // Validate the loaded data structure
-    if (!parsed.todo || !parsed.progress || !parsed.done) {
-      console.warn("Invalid data structure, returning defaults");
-      return DEFAULT_DATA;
+
+    // Validate and return
+    if (parsed) {
+      return parsed;
     }
 
-    return parsed;
+    console.warn(
+      "Invalid data structure or dashboard not found, returning defaults"
+    );
+    return DEFAULT_DATA;
   } catch (error) {
     console.error("Error loading tasks:", error);
     return DEFAULT_DATA;

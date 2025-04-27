@@ -6,8 +6,8 @@ const { saveTasks, loadTasks } = require("./fileSystem");
 let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1200,
-    height: 800,
+    width: 1400,
+    height: 1000,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: false,
@@ -51,6 +51,6 @@ ipcMain.handle("load-tasks", async () => {
   return loadTasks();
 });
 
-ipcMain.on("save-tasks", (event, data) => {
-  saveTasks(data);
+ipcMain.on("save-tasks", (event, dashboardData, columnData) => {
+  saveTasks(dashboardData, columnData);
 });

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { X, Settings2 } from "lucide-react";
+import { X } from "lucide-react";
 import useTaskStore from "../store/useTaskStore";
 import EditItemModal from "./EditItemModal";
 

@@ -6,6 +6,8 @@ const useTaskStore = create((set, get) => ({
     progress: [],
     done: [],
   },
+  storeDashboardId: null,
+  storeDashboardTitle: null,
 
   addTask: (columnId, taskTitle, taskText) => {
     console.log(columnId);
@@ -47,7 +49,7 @@ const useTaskStore = create((set, get) => ({
 
       if (wasUpdated) {
         // Auto-save only if something changed
-        window.electronAPI?.saveTasks(newColumns);
+        get().saveTasks(newColumns);
         return { columns: newColumns };
       }
       return state;
@@ -56,7 +58,6 @@ const useTaskStore = create((set, get) => ({
   moveTask: (itemId, targetColumn) => {
     set((state) => {
       const newColumns = { ...state.columns };
-
       // Remove from current column
       Object.keys(newColumns).forEach((columnId) => {
         newColumns[columnId] = newColumns[columnId].filter(
@@ -71,7 +72,7 @@ const useTaskStore = create((set, get) => ({
         newColumns[targetColumn] = [...newColumns[targetColumn], movedItem];
       }
       // Auto-save
-      window.electronAPI?.saveTasks(newColumns);
+      get().saveTasks(newColumns);
 
       return { columns: newColumns };
     });
@@ -95,29 +96,34 @@ const useTaskStore = create((set, get) => ({
 
       if (wasDeleted) {
         // Auto-save only if something was actually deleted
-        window.electronAPI?.saveTasks(newColumns);
+        get().saveTasks(newColumns);
         return { columns: newColumns };
       }
 
       return state;
     });
   },
-  saveTasks: async () => {
+  saveTasks: async (newColumns) => {
     try {
-      await window.electronAPI.saveTasks(get().columns);
+      await window.electronAPI.saveTasks(
+        { id: get().storeDashboardId, title: get().storeDashboardTitle },
+        newColumns ? newColumns : get().columns
+      );
     } catch (error) {
       console.error("Save failed:", error);
     }
   },
-  loadTasks: async () => {
-    const tasks = await window.electronAPI?.loadTasks();
-    console.log("Loaded", tasks);
-    if (tasks)
+  loadTasksByDashboardId: async (id) => {
+    const dashboards = await window.electronAPI?.loadTasks();
+    const dashboard = dashboards?.find((d) => d.id === id);
+    if (dashboard)
       set({
+        storeDashboardId: id,
+        storeDashboardTitle: dashboard.title,
         columns: {
-          todo: tasks?.todo || [],
-          progress: tasks?.progress || [],
-          done: tasks?.done || [],
+          todo: dashboard?.todo || [],
+          progress: dashboard?.progress || [],
+          done: dashboard?.done || [],
         },
       });
   },

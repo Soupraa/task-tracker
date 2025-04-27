@@ -2,23 +2,25 @@
 import { useEffect } from "react";
 import Draggable from "../components/Draggable";
 import Column from "./Column";
-import useTaskStore from '../store/useTaskStore';
+import useTaskStore from "../store/useTaskStore";
+import ToolBar from "./ToolBar";
 
-export default function Dashboard() {
-  const { columns, loadTasks, moveTask } = useTaskStore();
-
+export default function Dashboard({ dashboardId }) {
+  const { columns, moveTask, loadTasksByDashboardId, storeDashboardTitle } = useTaskStore();
   useEffect(() => {
-      loadTasks();
+    loadTasksByDashboardId(dashboardId);
   }, []);
   const ParagraphStyle = "text-sm";
   return (
     <div className="flex gap-6 max-w-4xl m-auto justify-center">
+      {storeDashboardTitle}
+      <ToolBar />
       {columns && (
         <>
           <Column
             id="todo"
             title="To Do"
-            onDrop={(itemId) =>  moveTask(itemId, "todo")}
+            onDrop={(itemId) => moveTask(itemId, "todo")}
           >
             {columns.todo.map((item) => (
               <Draggable key={item.id} item={item}>
