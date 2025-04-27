@@ -1,26 +1,27 @@
 import React, { useState } from "react";
 import useTaskStore from "../store/useTaskStore";
 import { COLUMNS, isValidDescription } from "./constants";
+import { Settings2 } from "lucide-react";
 
-export default function AddNewItem() {
+export default function EditItemModal({ item }) {
   const modalRef = React.useRef(null);
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState(item.title);
   const [titleError, setTitleError] = useState("");
-  const [description, setDescription] = useState("");
+  const [description, setDescription] = useState(item.text);
   const [descriptionError, setDescriptionError] = useState("");
-  const [activeColumn, setActiveColumn] = useState(COLUMNS.TODO);
-  const { addTask } = useTaskStore();
+  const { updateTask } = useTaskStore();
 
   const openModal = () => {
+    setTitle(item.title);
+    setDescription(item.text);
     setTitleError("");
-    setTitle("");
-    setDescription("");
     setDescriptionError("");
-    setActiveColumn(COLUMNS.TODO);
     modalRef.current?.showModal();
   };
 
   const closeModal = () => {
+    setTitle(item.title);
+    setDescription(item.text);
     modalRef.current?.close();
   };
 
@@ -37,26 +38,29 @@ export default function AddNewItem() {
       return;
     }
     console.log(title, description);
-    await addTask(activeColumn, title, description);
+    await updateTask(item.id, { title: title, text: description });
     closeModal();
   };
 
   return (
     <div>
       <button
-        className="border-2 p-2 w-fit font-jersey rounded-2xl"
-        type="button"
         onClick={openModal}
+        className="cursor-pointer transition-all duration-300 ease-in-out hover:text-gray-400 rounded-l w-fit h-fit"
       >
-        Add new
+        <div className="tooltip" data-tip="Edit">
+          <Settings2 className="w-5" />
+        </div>
       </button>
       <dialog
         ref={modalRef}
         id="my_modal_2"
-        className="modal scrollbar-hide"
+        className="text-black m-auto rounded-md w-96 min-w-fit"
       >
-        <div className="modal-box h-[680px] max-w-md p-12 font-inter">
-          <h1 className="text-3xl font-jersey mb-2">Add new task</h1>
+        <div
+          className="dark:bg-amber-300 h-[680px] max-w-2xl p-12 font-inter"
+        >
+          <h1 className="text-3xl font-jersey mb-2">Update task</h1>
 
           <form onSubmit={handleSubmit}>
             <label className="text-sm font-semibold tracking-wide">Title</label>
@@ -64,7 +68,7 @@ export default function AddNewItem() {
               name="name"
               type="text"
               placeholder="Title"
-              className="w-full bg-slate-100 rounded-xl mt-2 h-10 p-2 text-black"
+              className="w-full bg-slate-100 rounded-xl mt-2 h-10 p-2"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
             />
@@ -78,26 +82,13 @@ export default function AddNewItem() {
             <textarea
               name="description"
               placeholder="Description"
-              className="w-full bg-slate-100 rounded-xl mt-2 h-40 p-2 text-black"
+              className="w-full bg-slate-100 rounded-xl mt-2 h-40 p-2"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-             {descriptionError && (
+            {descriptionError && (
               <p className="text-red-500 text-sm my-2">{descriptionError}</p>
             )}
-            <div className="mb-5" />
-            <label className="text-sm font-semibold tracking-wide">
-              Status
-            </label>
-            <select
-              value={activeColumn}
-              onChange={(e) => setActiveColumn(e.target.value)}
-              className="p-2 border rounded-xl w-full bg-slate-100 mt-2 text-black"
-            >
-              <option value="todo">To Do</option>
-              <option value="progress">In Progress</option>
-              <option value="done">Done</option>
-            </select>
             <div className="mb-5" />
             <div className="flex justify-center gap-3 text-xl">
               <button
@@ -111,7 +102,7 @@ export default function AddNewItem() {
                 className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all"
                 type="submit"
               >
-                Create
+                Update
               </button>
             </div>
           </form>

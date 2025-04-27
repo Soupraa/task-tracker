@@ -11,16 +11,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 const jersey = Jersey_10({
-  subsets: ['latin'],
-  variable: '--font-jersey',
-  display: 'swap', // Helps with loading
-  weight: "400"
+  subsets: ["latin"],
+  variable: "--font-jersey",
+  display: "swap", // Helps with loading
+  weight: "400",
 });
 
 const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-  display: 'swap', // Helps with loading
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap", // Helps with loading
 });
 export const metadata = {
   title: "Task Tracker",
@@ -29,9 +29,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${jersey.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${jersey.variable} ${inter.variable} antialiased dark`}
       >
         {children}
       </body>

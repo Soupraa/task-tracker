@@ -1,11 +1,10 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Draggable from "../components/Draggable";
 import Column from "./Column";
 import useTaskStore from '../store/useTaskStore';
 
 export default function Dashboard() {
-  const [loading, setIsLoading] = useState(false);
   const { columns, loadTasks, moveTask } = useTaskStore();
 
   useEffect(() => {
@@ -22,7 +21,7 @@ export default function Dashboard() {
             onDrop={(itemId) =>  moveTask(itemId, "todo")}
           >
             {columns.todo.map((item) => (
-              <Draggable key={item.id} id={item.id} title={item.title}>
+              <Draggable key={item.id} item={item}>
                 <p className={ParagraphStyle}>{item.text}</p>
               </Draggable>
             ))}
@@ -34,7 +33,7 @@ export default function Dashboard() {
             onDrop={(itemId) => moveTask(itemId, "progress")}
           >
             {columns.progress.map((item) => (
-              <Draggable key={item.id} id={item.id} title={item.title}>
+              <Draggable key={item.id} item={item}>
                 <p className={ParagraphStyle}>{item.text}</p>
               </Draggable>
             ))}
@@ -46,7 +45,7 @@ export default function Dashboard() {
             onDrop={(itemId) => moveTask(itemId, "done")}
           >
             {columns.done.map((item) => (
-              <Draggable key={item.id} id={item.id} title={item.title}>
+              <Draggable key={item.id} item={item}>
                 <p className={ParagraphStyle}>{item.text}</p>
               </Draggable>
             ))}

@@ -1,14 +1,12 @@
 import { create } from "zustand";
 
 const useTaskStore = create((set, get) => ({
-  // Initial state
   columns: {
     todo: [],
     progress: [],
     done: [],
   },
 
-  // Actions
   addTask: (columnId, taskTitle, taskText) => {
     console.log(columnId);
     const newTask = {
@@ -33,7 +31,6 @@ const useTaskStore = create((set, get) => ({
       const newColumns = { ...state.columns };
       let wasUpdated = false;
 
-      // Find and update the task in any column
       Object.keys(newColumns).forEach((columnId) => {
         newColumns[columnId] = newColumns[columnId].map((item) => {
           if (item.id === itemId) {
@@ -41,7 +38,7 @@ const useTaskStore = create((set, get) => ({
             return {
               ...item,
               ...updates,
-              updatedAt: new Date().toISOString(), // Add update timestamp
+              updatedAt: new Date().toISOString(),
             };
           }
           return item;
@@ -53,8 +50,6 @@ const useTaskStore = create((set, get) => ({
         window.electronAPI?.saveTasks(newColumns);
         return { columns: newColumns };
       }
-
-      // Return unchanged state if no update happened
       return state;
     });
   },
@@ -81,7 +76,32 @@ const useTaskStore = create((set, get) => ({
       return { columns: newColumns };
     });
   },
+  deleteTask: (itemId) => {
+    set((state) => {
+      const newColumns = { ...state.columns };
+      let wasDeleted = false;
 
+      // Remove task from all columns
+      Object.keys(newColumns).forEach((columnId) => {
+        const originalLength = newColumns[columnId].length;
+        newColumns[columnId] = newColumns[columnId].filter(
+          (item) => item.id !== itemId
+        );
+
+        if (newColumns[columnId].length !== originalLength) {
+          wasDeleted = true;
+        }
+      });
+
+      if (wasDeleted) {
+        // Auto-save only if something was actually deleted
+        window.electronAPI?.saveTasks(newColumns);
+        return { columns: newColumns };
+      }
+
+      return state;
+    });
+  },
   saveTasks: async () => {
     try {
       await window.electronAPI.saveTasks(get().columns);
@@ -89,8 +109,6 @@ const useTaskStore = create((set, get) => ({
       console.error("Save failed:", error);
     }
   },
-
-  // Optional: Load tasks
   loadTasks: async () => {
     const tasks = await window.electronAPI?.loadTasks();
     console.log("Loaded", tasks);
