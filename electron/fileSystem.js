@@ -6,25 +6,13 @@ const path = require("path");
 const DEFAULT_DATA = {
   todo: [
     {
-      id: "task1",
-      text: "Design Homepage",
-      title: "A LOOOnnnGGGGG TiTTTTTTLLLLLEEEE",
-    },
-    {
-      id: "task2",
-      text: "Implement API",
-      title:
-        "TiTTTTTTLLLLLEEEETiTTTTTTLL LLLEEEETiTTTTTTLLLLLEE  EETiTTTTTTLLLLLEEEETiT  TTTTTLLLLLEEE  TiTTTTTTLLLLLEEEE",
-    },
+      id: "welcome",
+      text: "Welcome to OnTask",
+      title: "Start creating tasks, stay locked in, happy tasking :)",
+    }
   ],
-  progress: [
-    {
-      id: "task3",
-      text: "Build and maintain full stack web applications for new innovative projects. Collaborate closely with cross-functional teams, including designers, developers and product managers to create high quality web solutions. Ensure applications are accessible, performant, and responsive across devices, while applying best practices in web development.",
-      title: "TITLE",
-    },
-  ],
-  done: [{ id: "task4", text: "Setup CI/CD Pipeline", title: "TITLE" }],
+  progress: [],
+  done: [],
 };
 const getSavePath = () => {
   const userDataPath = app.getPath("userData");
@@ -39,7 +27,6 @@ const getSavePath = () => {
 
 const saveTasks = (dashboardData, columnData) => {
   try {
-    // console.log("in FS", dashboardId, title, data);
     // 1. Load existing data (or initialize if empty)
     let allDashboards = [];
     if (fs.existsSync(getSavePath())) {
@@ -61,8 +48,9 @@ const saveTasks = (dashboardData, columnData) => {
     }
 
     // 3. Find and update specific dashboard
-    const dashboardIndex = allDashboards.findIndex((d) => d.id === dashboardData.id);
-    // console.log(data);
+    const dashboardIndex = allDashboards.findIndex(
+      (d) => d.id === dashboardData.id
+    );
     const updatedDashboard = {
       id: dashboardData.id,
       title: dashboardData.title,
@@ -88,17 +76,17 @@ const saveTasks = (dashboardData, columnData) => {
     console.error("Save failed:", error);
 
     // 5. Emergency fallback
-    try {
-      const fallbackData = fs.existsSync(getSavePath())
-        ? JSON.parse(fs.readFileSync(getSavePath(), "utf8"))
-        : [];
+    // try {
+    //   const fallbackData = fs.existsSync(getSavePath())
+    //     ? JSON.parse(fs.readFileSync(getSavePath(), "utf8"))
+    //     : [];
 
-      if (Array.isArray(fallbackData)) {
-        fs.writeFileSync(getSavePath(), JSON.stringify(fallbackData, null, 2));
-      }
-    } catch (fallbackError) {
-      console.error("Fallback save failed:", fallbackError);
-    }
+    //   if (Array.isArray(fallbackData)) {
+    //     fs.writeFileSync(getSavePath(), JSON.stringify(fallbackData, null, 2));
+    //   }
+    // } catch (fallbackError) {
+    //   console.error("Fallback save failed:", fallbackError);
+    // }
 
     return false;
   }

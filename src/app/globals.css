@@ -8,6 +8,7 @@
   --font-mono: var(--font-geist-mono);
   --font-jersey: var(--font-jersey);
   --font-inter: var(--font-inter);
+  --font-oswald: var(--font-oswald);
 }
 
 @media (prefers-color-scheme: dark) {

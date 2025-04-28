@@ -6,7 +6,7 @@ export default function Column({ id, title, children, onDrop }) {
   const handleDragOver = (e) => {
     e.preventDefault();
     // Only activate after a slight delay to reduce sensitivity
-    setTimeout(() => setIsActive(true), 100);
+    setIsActive(true);
   };
 
   const handleDragLeave = () => {
@@ -25,17 +25,16 @@ export default function Column({ id, title, children, onDrop }) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="flex flex-col p-4 rounded-xl min-h-96 min-w-64"
+      className="flex flex-col p-4 rounded-xl min-h-96 min-w-56"
       style={{
-        backgroundColor: isActive ? "#f8fafc" : "#fff",
-        border: `1px solid ${isActive ? "#94a3b8" : "#e2e8f0"}`,
+        backgroundColor: isActive ? "#fff" : "#f8fafc",
+        border: `1px solid ${isActive ? "black" : "#94a3b8"}`,
         transition: "all 0.3s ease",
       }}
     >
-<h2 className="mb-4 text-[#334155] text-center text-3xl font-jersey break-all overflow-hidden">
-  {title}
-</h2>
-
+      <h2 className={`mb-4 text-center text-3xl font-jersey break-all overflow-hidden ${isActive ? "text-black": "text-[#334155]"}`}>
+        {title}
+      </h2>
 
       <div className="flex flex-col">{children}</div>
     </div>

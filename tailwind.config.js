@@ -12,6 +12,7 @@ module.exports = {
         mono: ["var(--font-geist-mono)", ...fontFamily.mono],
         jersey: ["var(--font-jersey)", ...fontFamily.jersey],
         inter: ["var(--font-inter)", ...fontFamily.inter],
+        oswald: ["var(--font-oswald)", ...fontFamily.oswald]
       },
     },
   },

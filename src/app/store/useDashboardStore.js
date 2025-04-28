@@ -9,6 +9,7 @@ const useDashboardStore = create((set, get) => ({
       const data = await window.electronAPI?.loadTasks();
       if (data && Array.isArray(data)) {
         set({
+          currentDashboardId: data[0].id,
           dashboards: data.map((d) => ({
             id: d.id,
             title: d.title,
@@ -25,6 +26,9 @@ const useDashboardStore = create((set, get) => ({
       console.error("Error initializing dashboards:", error);
       return false;
     }
+  },
+  setActiveDashboard: (dashboardId) => {
+    set({ currentDashboardId: dashboardId });
   },
 }));
 

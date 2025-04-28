@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useTaskStore from "../store/useTaskStore";
-import { COLUMNS, isValidDescription } from "./constants";
+import { isValidDescription } from "./constants";
 import { Settings2 } from "lucide-react";
 
 export default function EditItemModal({ item }) {
@@ -10,18 +10,21 @@ export default function EditItemModal({ item }) {
   const [description, setDescription] = useState(item.text);
   const [descriptionError, setDescriptionError] = useState("");
   const { updateTask } = useTaskStore();
+  const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
     setTitle(item.title);
     setDescription(item.text);
     setTitleError("");
     setDescriptionError("");
+    setIsOpen(true); // <-- set state first
     modalRef.current?.showModal();
   };
 
   const closeModal = () => {
     setTitle(item.title);
     setDescription(item.text);
+    setIsOpen(false); // <-- hide with transition
     modalRef.current?.close();
   };
 
@@ -55,11 +58,10 @@ export default function EditItemModal({ item }) {
       <dialog
         ref={modalRef}
         id="my_modal_2"
-        className="text-black m-auto rounded-md w-96 min-w-fit"
+        className={`text-black m-auto rounded-md w-96 min-w-fit transition-all duration-300 ease-out
+          ${isOpen ? "opacity-100 scale-100 backdrop:bg-black/30 " : "opacity-0 scale-90"}`}
       >
-        <div
-          className="dark:bg-amber-300 h-[680px] max-w-2xl p-12 font-inter"
-        >
+        <div className="dark:bg-amber-300 h-[680px] max-w-2xl p-12 font-inter">
           <h1 className="text-3xl font-jersey mb-2">Update task</h1>
 
           <form onSubmit={handleSubmit}>

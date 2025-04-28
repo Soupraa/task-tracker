@@ -1,9 +1,9 @@
-import React from 'react'
-import AddNewItem from './AddNewItem'
+import React from "react";
+import AddNewItem from "./AddNewItem";
 export default function ToolBar() {
   return (
-    <div className="w-full bg-amber-200">      
-      <AddNewItem/>
-      </div>
-  )
+    <div className="w-full">
+      <AddNewItem />
+    </div>
+  );
 }

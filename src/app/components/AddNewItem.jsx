@@ -44,11 +44,11 @@ export default function AddNewItem() {
   return (
     <div>
       <button
-        className="border-2 p-2 w-fit font-jersey rounded-2xl"
+        className="border-2 px-4 py-2 w-fit font-jersey rounded-xl tracking-wide text-lg hover:bg-amber-100 transition-all cursor-pointer"
         type="button"
         onClick={openModal}
       >
-        Add new
+        New task
       </button>
       <dialog
         ref={modalRef}
@@ -92,7 +92,7 @@ export default function AddNewItem() {
             <select
               value={activeColumn}
               onChange={(e) => setActiveColumn(e.target.value)}
-              className="p-2 border rounded-xl w-full bg-slate-100 mt-2 text-black"
+              className="p-2 border rounded-xl w-full bg-slate-100 mt-2 text-black cursor-pointer"
             >
               <option value="todo">To Do</option>
               <option value="progress">In Progress</option>
@@ -101,14 +101,14 @@ export default function AddNewItem() {
             <div className="mb-5" />
             <div className="flex justify-center gap-3 text-xl">
               <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all"
+                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all cursor-pointer"
                 type="button"
                 onClick={closeModal}
               >
                 Close
               </button>
               <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all"
+                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all cursor-pointer"
                 type="submit"
               >
                 Create

@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import useTaskStore from "../store/useTaskStore";
 import EditItemModal from "./EditItemModal";
 
-export default function Draggable({children, onDragEnd, item}) {
+export default function Draggable({ children, onDragEnd, item }) {
   const [isDragging, setIsDragging] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef(null);
@@ -23,10 +23,10 @@ export default function Draggable({children, onDragEnd, item}) {
     if (onDragEnd) onDragEnd();
   };
 
-  const toggleMenu = (e) => {
-    e.stopPropagation(); // Prevent this click from triggering the document click handler
-    setShowMenu(!showMenu);
-  };
+  // const toggleMenu = (e) => {
+  //   e.stopPropagation(); // Prevent this click from triggering the document click handler
+  //   setShowMenu(!showMenu);
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -72,7 +72,7 @@ export default function Draggable({children, onDragEnd, item}) {
     >
       <div className="flex">
         <div className="inline-flex justify-end w-full gap-1">
-          <EditItemModal item={item}/>
+          <EditItemModal item={item} />
           <button
             onClick={handleDelete}
             className="cursor-pointer transition-all duration-300 ease-in-out hover:text-red-500 rounded-l w-fit h-fit"
@@ -83,10 +83,13 @@ export default function Draggable({children, onDragEnd, item}) {
           </button>
         </div>
       </div>
-      {/* Content with proper text formatting */}
       <div>
-        <h3 className="text-3xl font-jersey break-words">{item.title}</h3>
-        <div className="text-sm whitespace-normal break-words">{children}</div>
+        <h3 className="text-2xl font-oswald break-words tracking-wide">
+          {item.title}
+        </h3>
+        <div className="text-sm whitespace-normal break-words mt-1.5">
+          {children}
+        </div>
       </div>
     </div>
   );
