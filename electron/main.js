@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
-const { saveTasks, loadTasks } = require("./fileSystem");
+const { saveTasks, loadTasks, saveDashboards } = require("./fileSystem");
 
 let mainWindow;
 function createWindow() {
@@ -53,4 +53,8 @@ ipcMain.handle("load-tasks", async () => {
 
 ipcMain.on("save-tasks", (event, dashboardData, columnData) => {
   saveTasks(dashboardData, columnData);
+});
+
+ipcMain.on("save-dashboards", (event, dashboards) => {
+  saveDashboards(dashboards);
 });

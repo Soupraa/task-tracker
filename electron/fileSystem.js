@@ -1,28 +1,29 @@
-// electron/fileSystem.js
 const { app } = require("electron");
 const fs = require("fs");
 const path = require("path");
 
-const DEFAULT_DATA = {
-  todo: [
-    {
-      id: "welcome",
-      text: "Welcome to OnTask",
-      title: "Start creating tasks, stay locked in, happy tasking :)",
-    }
-  ],
-  progress: [],
-  done: [],
-};
+const DEFAULT_DATA = [
+  {
+    id: "defaultId",
+    title: "dashboard",
+    todo: [
+      {
+        id: "welcome",
+        title: "Welcome to OnTask",
+        text: "Start creating tasks, stay locked in, happy tasking :)",
+      },
+    ],
+    progress: [],
+    done: [],
+  },
+];
 const getSavePath = () => {
   const userDataPath = app.getPath("userData");
   // Create app directory if it doesn't exist
   if (!fs.existsSync(userDataPath)) {
     fs.mkdirSync(userDataPath, { recursive: true });
   }
-  return path.join(userDataPath, "tasks.json");
-
-  //   return path.join('data/data.json', "tasks.json");
+  return path.join(userDataPath, "app-data.json");
 };
 
 const saveTasks = (dashboardData, columnData) => {
@@ -74,20 +75,6 @@ const saveTasks = (dashboardData, columnData) => {
     return true;
   } catch (error) {
     console.error("Save failed:", error);
-
-    // 5. Emergency fallback
-    // try {
-    //   const fallbackData = fs.existsSync(getSavePath())
-    //     ? JSON.parse(fs.readFileSync(getSavePath(), "utf8"))
-    //     : [];
-
-    //   if (Array.isArray(fallbackData)) {
-    //     fs.writeFileSync(getSavePath(), JSON.stringify(fallbackData, null, 2));
-    //   }
-    // } catch (fallbackError) {
-    //   console.error("Fallback save failed:", fallbackError);
-    // }
-
     return false;
   }
 };
@@ -104,11 +91,22 @@ const loadTasks = () => {
     const data = fs.readFileSync(getSavePath(), "utf8");
     const parsed = JSON.parse(data);
 
-    // Validate and return
-    if (parsed) {
+    // strict validation of parsed data, if not expected return default
+    if (
+      Array.isArray(parsed) &&
+      parsed.every(
+        (item) =>
+          typeof item === "object" &&
+          item !== null &&
+          typeof item.id === "string" &&
+          typeof item.title === "string" &&
+          Array.isArray(item.todo) &&
+          Array.isArray(item.progress) &&
+          Array.isArray(item.done)
+      )
+    ) {
       return parsed;
     }
-
     console.warn(
       "Invalid data structure or dashboard not found, returning defaults"
     );
@@ -119,8 +117,12 @@ const loadTasks = () => {
   }
 };
 
+const saveDashboards = (dashboards) => {
+  fs.writeFileSync(getSavePath(), JSON.stringify(dashboards, null, 2));
+};
 // Use module.exports for CommonJS
 module.exports = {
   saveTasks,
   loadTasks,
+  saveDashboards,
 };

@@ -11,7 +11,6 @@ export default function Draggable({ children, onDragEnd, item }) {
   const { deleteTask } = useTaskStore();
 
   const handleDragStart = (e) => {
-    console.log(e);
     e.dataTransfer.setData("text/plain", item.id);
     e.dataTransfer.effectAllowed = "move";
     setIsDragging(true);

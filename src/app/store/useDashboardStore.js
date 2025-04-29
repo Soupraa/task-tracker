@@ -19,6 +19,9 @@ const useDashboardStore = create((set, get) => ({
             updatedAt: d.updatedAt,
           })),
         });
+        console.log("SAVING DASHBORDS")
+        get().saveDashboards();
+
         return true;
       }
       return false;
@@ -29,6 +32,9 @@ const useDashboardStore = create((set, get) => ({
   },
   setActiveDashboard: (dashboardId) => {
     set({ currentDashboardId: dashboardId });
+  },
+  saveDashboards: async () => {
+    await window.electronAPI.saveDashboards(get().dashboards);
   },
 }));
 

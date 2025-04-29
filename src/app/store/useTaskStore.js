@@ -116,7 +116,8 @@ const useTaskStore = create((set, get) => ({
   loadTasksByDashboardId: async (id) => {
     const dashboards = await window.electronAPI?.loadTasks();
     const dashboard = dashboards?.find((d) => d.id === id);
-    if (dashboard)
+
+    if (dashboard) {
       set({
         storeDashboardId: id,
         storeDashboardTitle: dashboard.title,
@@ -126,6 +127,7 @@ const useTaskStore = create((set, get) => ({
           done: dashboard?.done || [],
         },
       });
+    }
   },
 }));
 

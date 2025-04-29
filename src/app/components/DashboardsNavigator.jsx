@@ -10,6 +10,7 @@ export default function DashboardsNavigator() {
     dashboards,
     currentDashboardId,
     setActiveDashboard,
+    saveDashboards
   } = useDashboardStore();
   const { loadTasksByDashboardId } = useTaskStore();
 
@@ -20,6 +21,7 @@ export default function DashboardsNavigator() {
 
   useEffect(() => {
     initializeDashboards();
+
   }, []);
   const buttonStyle =
     "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all";
