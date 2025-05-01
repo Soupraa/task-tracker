@@ -3,7 +3,8 @@ import Dashboard from "./Dashboard";
 import useDashboardStore from "../store/useDashboardStore";
 import useTaskStore from "../store/useTaskStore";
 import { Plus } from "lucide-react";
-import EditDashboardModal from "./EditDashboardModal";
+import EditDashboardModal from "./modals/EditDashboardModal";
+import AddNewDashboardModal from "./modals/AddNewDashboardModal";
 
 export default function DashboardsNavigator() {
   const {
@@ -69,14 +70,7 @@ export default function DashboardsNavigator() {
         ))}
 
         {dashboards.length < 3 && (
-          <div className="tooltip" data-tip="Add new dashboard">
-            <button
-              onClick={() => console.log("clicked")}
-              className={buttonStyle}
-            >
-              <Plus />
-            </button>
-          </div>
+          <AddNewDashboardModal/>
         )}
       </div>
 

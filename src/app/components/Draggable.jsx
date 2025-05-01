@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import useTaskStore from "../store/useTaskStore";
-import EditItemModal from "./EditItemModal";
+import EditItemModal from "./modals/EditItemModal";
 
 export default function Draggable({ children, onDragEnd, item }) {
   const [isDragging, setIsDragging] = useState(false);

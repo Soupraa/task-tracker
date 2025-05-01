@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import useDashboardStore from "../store/useDashboardStore";
+import useDashboardStore from "../../store/useDashboardStore";
+import ModalButtonGroup from "../ModalButtonGroup";
 
 export default function EditDashboardModal({
   dashboardId,
@@ -58,21 +59,11 @@ export default function EditDashboardModal({
               <p className="text-red-500 text-sm my-2">{titleError}</p>
             )}
             <div className="mb-10" />
-            <div className="flex justify-center gap-3 text-xl">
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all cursor-pointer"
-                type="button"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all cursor-pointer"
-                type="submit"
-              >
-                Update
-              </button>
-            </div>
+            <ModalButtonGroup
+              leftLabel={"Close"}
+              rightLabel={"Update"}
+              closeModalFunc={closeModal}
+            />
           </form>
         </div>
       </dialog>

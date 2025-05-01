@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import useTaskStore from "../store/useTaskStore";
-import { isValidDescription } from "./constants";
+import useTaskStore from "../../store/useTaskStore";
+import { isValidDescription } from "../constants";
 import { Settings2 } from "lucide-react";
+import ModalButtonGroup from "../ModalButtonGroup";
 
 export default function EditItemModal({ item }) {
   const modalRef = React.useRef(null);
@@ -59,7 +60,11 @@ export default function EditItemModal({ item }) {
         ref={modalRef}
         id="my_modal_2"
         className={`text-black m-auto rounded-md w-96 min-w-fit transition-all duration-300 ease-out
-          ${isOpen ? "opacity-100 scale-100 backdrop:bg-black/30 " : "opacity-0 scale-90"}`}
+          ${
+            isOpen
+              ? "opacity-100 scale-100 backdrop:bg-black/30 "
+              : "opacity-0 scale-90"
+          }`}
       >
         <div className="dark:bg-amber-300 h-[680px] max-w-2xl p-12 font-inter">
           <h1 className="text-3xl font-jersey mb-2">Update task</h1>
@@ -92,21 +97,11 @@ export default function EditItemModal({ item }) {
               <p className="text-red-500 text-sm my-2">{descriptionError}</p>
             )}
             <div className="mb-5" />
-            <div className="flex justify-center gap-3 text-xl">
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all"
-                type="button"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all"
-                type="submit"
-              >
-                Update
-              </button>
-            </div>
+            <ModalButtonGroup
+              leftLabel={"Close"}
+              rightLabel={"Update"}
+              closeModalFunc={closeModal}
+            />
           </form>
         </div>
       </dialog>

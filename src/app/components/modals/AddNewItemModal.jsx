@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import useTaskStore from "../store/useTaskStore";
-import { COLUMNS, isValidDescription } from "./constants";
+import useTaskStore from "../../store/useTaskStore";
+import { COLUMNS, isValidDescription } from "../constants";
+import ModalButtonGroup from "../ModalButtonGroup";
 
 export default function AddNewItemModal() {
   const modalRef = React.useRef(null);
@@ -50,11 +51,7 @@ export default function AddNewItemModal() {
       >
         New task
       </button>
-      <dialog
-        ref={modalRef}
-        id="my_modal_2"
-        className="modal scrollbar-hide"
-      >
+      <dialog ref={modalRef} id="my_modal_2" className="modal scrollbar-hide">
         <div className="modal-box h-[680px] max-w-md p-12 font-inter">
           <h1 className="text-3xl font-jersey mb-2">Add new task</h1>
 
@@ -82,7 +79,7 @@ export default function AddNewItemModal() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
-             {descriptionError && (
+            {descriptionError && (
               <p className="text-red-500 text-sm my-2">{descriptionError}</p>
             )}
             <div className="mb-5" />
@@ -99,21 +96,11 @@ export default function AddNewItemModal() {
               <option value="done">Done</option>
             </select>
             <div className="mb-5" />
-            <div className="flex justify-center gap-3 text-xl">
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-red-400 transition-all cursor-pointer"
-                type="button"
-                onClick={closeModal}
-              >
-                Close
-              </button>
-              <button
-                className="border-2 p-2 w-[50%] font-jersey rounded-2xl tracking-wide hover:bg-green-400 transition-all cursor-pointer"
-                type="submit"
-              >
-                Create
-              </button>
-            </div>
+            <ModalButtonGroup
+              leftLabel={"Close"}
+              rightLabel={"Add"}
+              closeModalFunc={closeModal}
+            />
           </form>
         </div>
       </dialog>
