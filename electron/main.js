@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const path = require("path");
 const isDev = require("electron-is-dev");
 const { saveTasks, loadTasks, saveDashboards } = require("./fileSystem");
@@ -57,4 +57,30 @@ ipcMain.on("save-tasks", (event, dashboardData, columnData) => {
 
 ipcMain.on("save-dashboards", (event, dashboards) => {
   saveDashboards(dashboards);
+});
+
+ipcMain.on("show-dashboard-context-menu", (event, dashboardId) => {
+  const menu = Menu.buildFromTemplate([
+    {
+      label: "Edit",
+      click: () => {
+        event.sender.send("context-menu-command", {
+          action: "edit",
+          id: dashboardId,
+        });
+      },
+    },
+    {
+      label: "Delete",
+      click: () => {
+        event.sender.send("context-menu-command", {
+          action: "delete",
+          id: dashboardId,
+        });
+      },
+    },
+  ]);
+
+  const win = BrowserWindow.fromWebContents(event.sender);
+  menu.popup({ window: win });
 });

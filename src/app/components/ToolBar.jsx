@@ -1,9 +1,9 @@
 import React from "react";
-import AddNewItem from "./AddNewItem";
+import AddNewItemModal from "./AddNewItemModal";
 export default function ToolBar() {
   return (
     <div className="w-full">
-      <AddNewItem />
+      <AddNewItemModal />
     </div>
   );
 }

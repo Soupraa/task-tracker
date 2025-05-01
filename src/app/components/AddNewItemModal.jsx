@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useTaskStore from "../store/useTaskStore";
 import { COLUMNS, isValidDescription } from "./constants";
 
-export default function AddNewItem() {
+export default function AddNewItemModal() {
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");

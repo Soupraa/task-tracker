@@ -15,6 +15,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
   saveDashboards: async (dashboards) => {
     return await ipcRenderer.send("save-dashboards", dashboards);
   },
+  showContextMenu: (event, dashboardId) =>
+{    ipcRenderer.send("show-dashboard-context-menu", event, dashboardId);
+},
+  onContextMenuCommand: (callback) =>
+    ipcRenderer.on("context-menu-command", (event, payload) =>
+      callback(payload)
+    ),
   // Other APIs you need
   getAppVersion: () => ipcRenderer.invoke("get-app-version"),
 });
