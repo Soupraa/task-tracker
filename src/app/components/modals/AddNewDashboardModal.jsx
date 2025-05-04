@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import useTaskStore from "../../store/useTaskStore";
 import { Plus } from "lucide-react";
 import ModalButtonGroup from "../ModalButtonGroup";
+import useDashboardStore from "@/app/store/useDashboardStore";
+import { isValidLength } from "../constants";
 
 export default function AddNewDashboardModal() {
+  const { addNewDashboard } = useDashboardStore();
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
-  const { updateTask } = useTaskStore();
   const [isOpen, setIsOpen] = useState(false);
 
   const openModal = () => {
@@ -26,14 +27,16 @@ export default function AddNewDashboardModal() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     //validation
     if (!title.trim()) {
       setTitleError("Title is required.");
       return;
     }
-    console.log(title);
-    // await updateTask(item.id, { title: title, text: description });
+    if (!isValidLength(title, 30)) {
+      setTitleError("Name cannot exceed 30 character limit.");
+      return;
+    }
+    await addNewDashboard(title);
     closeModal();
   };
 
@@ -76,7 +79,11 @@ export default function AddNewDashboardModal() {
               <p className="text-red-500 text-sm my-2">{titleError}</p>
             )}
             <div className="mb-5" />
-            <ModalButtonGroup leftLabel={"Close"} rightLabel={"Add"} closeModalFunc={closeModal}/>
+            <ModalButtonGroup
+              leftLabel={"Close"}
+              rightLabel={"Add"}
+              closeModalFunc={closeModal}
+            />
           </form>
         </div>
       </dialog>

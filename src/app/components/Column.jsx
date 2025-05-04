@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Column({ id, title, children, onDrop }) {
+export default function Column({ id, title, children, onDrop, count}) {
   const [isActive, setIsActive] = useState(false);
 
   const handleDragOver = (e) => {
@@ -25,7 +25,7 @@ export default function Column({ id, title, children, onDrop }) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="flex flex-col p-4 rounded-xl min-h-96 min-w-56"
+      className="flex flex-col p-4 rounded-xl min-h-96 max-w-72 min-w-56"
       style={{
         backgroundColor: isActive ? "#fff" : "#f8fafc",
         border: `1px solid ${isActive ? "black" : "#94a3b8"}`,
@@ -33,7 +33,7 @@ export default function Column({ id, title, children, onDrop }) {
       }}
     >
       <h2 className={`mb-4 text-center text-3xl font-jersey break-all overflow-hidden ${isActive ? "text-black": "text-[#334155]"}`}>
-        {title}
+        {title}: {count}
       </h2>
 
       <div className="flex flex-col">{children}</div>

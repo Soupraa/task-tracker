@@ -21,6 +21,7 @@ export default function Dashboard({ dashboardId }) {
               id="todo"
               title="To Do"
               onDrop={(itemId) => moveTask(itemId, "todo")}
+              count={columns.todo.length}
             >
               {columns.todo.map((item) => (
                 <Draggable key={item.id} item={item}>
@@ -33,6 +34,7 @@ export default function Dashboard({ dashboardId }) {
               id="progress"
               title="In Progress"
               onDrop={(itemId) => moveTask(itemId, "progress")}
+              count={columns.progress.length}
             >
               {columns.progress.map((item) => (
                 <Draggable key={item.id} item={item}>
@@ -45,6 +47,7 @@ export default function Dashboard({ dashboardId }) {
               id="done"
               title="Done"
               onDrop={(itemId) => moveTask(itemId, "done")}
+              count={columns.done.length}
             >
               {columns.done.map((item) => (
                 <Draggable key={item.id} item={item}>

@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 import useDashboardStore from "../store/useDashboardStore";
 import useTaskStore from "../store/useTaskStore";
-import { Plus } from "lucide-react";
 import EditDashboardModal from "./modals/EditDashboardModal";
 import AddNewDashboardModal from "./modals/AddNewDashboardModal";
+import DeleteDashboardModal from "./modals/DeleteDashboardModal";
 
 export default function DashboardsNavigator() {
   const {
@@ -16,7 +16,9 @@ export default function DashboardsNavigator() {
     dashboardToEditId,
   } = useDashboardStore();
   const { loadTasksByDashboardId } = useTaskStore();
-  const [showModal, setShowModal] = useState(false);
+  const [showEditDashboardModal, setShowEditDashboardModal] = useState(false);
+  const [showDeleteDashboardModal, setShowDeleteDashboardModal] =
+    useState(false);
 
   const handleDashboardChange = (dashboardId) => {
     setActiveDashboard(dashboardId);
@@ -28,28 +30,37 @@ export default function DashboardsNavigator() {
 
   useEffect(() => {
     window.electronAPI?.onContextMenuCommand(({ action, id }) => {
+      setDashboardToEdit(id);
       if (action === "edit") {
-        setDashboardToEdit(id);
-        setShowModal(true);
+        setShowEditDashboardModal(true);
       } else if (action === "delete") {
-        handleDeleteDashboard(id);
+        setShowDeleteDashboardModal(true);
       }
     });
   }, []);
 
   const buttonStyle =
     "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all";
-
   return (
     <div className="">
-      {showModal && (
+      {showEditDashboardModal && (
         <EditDashboardModal
           dashboardId={dashboardToEditId}
           dashboardTitle={
             dashboards.find((d) => d.id === dashboardToEditId)?.title || ""
           }
-          showModal={showModal}
-          setShowModal={setShowModal}
+          showModal={showEditDashboardModal}
+          setShowModal={setShowEditDashboardModal}
+        />
+      )}
+      {showDeleteDashboardModal && (
+        <DeleteDashboardModal
+          dashboardId={dashboardToEditId}
+          dashboardTitle={
+            dashboards.find((d) => d.id === dashboardToEditId)?.title || ""
+          }
+          showModal={showDeleteDashboardModal}
+          setShowModal={setShowDeleteDashboardModal}
         />
       )}
       <div className="w-full bg-gray-300 pt-10">
@@ -69,9 +80,7 @@ export default function DashboardsNavigator() {
           </button>
         ))}
 
-        {dashboards.length < 3 && (
-          <AddNewDashboardModal/>
-        )}
+        {dashboards.length < 6 && <AddNewDashboardModal />}
       </div>
 
       {currentDashboardId && (

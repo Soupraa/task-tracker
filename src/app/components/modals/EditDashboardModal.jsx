@@ -26,7 +26,6 @@ export default function EditDashboardModal({
       setTitleError("Name is required.");
       return;
     }
-    console.log(title, dashboardId);
     editExistingDashboard(dashboardId, title);
     closeModal();
   };

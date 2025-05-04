@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useTaskStore from "../../store/useTaskStore";
-import { isValidDescription } from "../constants";
+import { isValidDescription, isValidLength } from "../constants";
 import { Settings2 } from "lucide-react";
 import ModalButtonGroup from "../ModalButtonGroup";
 
@@ -41,7 +41,10 @@ export default function EditItemModal({ item }) {
       setDescriptionError("Description cannot exceed 500 character limit.");
       return;
     }
-    console.log(title, description);
+    if (!isValidLength(title, 100)) {
+      setTitleError("Title cannot exceed 100 character limit.")
+      return;
+    }
     await updateTask(item.id, { title: title, text: description });
     closeModal();
   };

@@ -20,7 +20,7 @@ const useDashboardStore = create((set, get) => ({
             updatedAt: d.updatedAt,
           })),
         });
-        console.log("SAVING DASHBORDS");
+        console.log("SAVING DASHBOARDS");
         get().saveDashboards();
 
         return true;
@@ -38,7 +38,6 @@ const useDashboardStore = create((set, get) => ({
     await window.electronAPI.saveDashboards(get().dashboards);
   },
   editExistingDashboard: async (dashboardId, newTitle) => {
-    
     const data = await window.electronAPI?.loadTasks();
     if (!data) return;
 
@@ -53,10 +52,35 @@ const useDashboardStore = create((set, get) => ({
     get().saveDashboards();
   },
   setDashboardToEdit: (dashboardId) => {
-    console.log(dashboardId)
-    set({dashboardToEditId: dashboardId});
+    console.log(dashboardId);
+    set({ dashboardToEditId: dashboardId });
   },
-  addNewDashboard: async () => {},
+  addNewDashboard: async (dashboardName) => {
+    const newDashboard = {
+      id: Date.now().toString(),
+      title: dashboardName,
+      todo: [],
+      progress: [],
+      done: [],
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    };
+    const data = await window.electronAPI?.loadTasks();
+    if (!data) return;
+
+    data.push(newDashboard);
+    set({ dashboards: data });
+    get().saveDashboards();
+  },
+
+  deleteDashboard: async (dashboardId) => {
+    const data = await window.electronAPI?.loadTasks();
+    if (!data) return;
+
+    const newDashboards = data.filter(d => d.id !== dashboardId);
+    set({dashboards: newDashboards});
+    get().saveDashboards();
+  },
 }));
 
 export default useDashboardStore;

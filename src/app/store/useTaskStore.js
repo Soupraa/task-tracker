@@ -10,7 +10,6 @@ const useTaskStore = create((set, get) => ({
   storeDashboardTitle: null,
 
   addTask: (columnId, taskTitle, taskText) => {
-    console.log(columnId);
     const newTask = {
       id: Date.now().toString(),
       title: taskTitle,

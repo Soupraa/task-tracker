@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useTaskStore from "../../store/useTaskStore";
-import { COLUMNS, isValidDescription } from "../constants";
+import { COLUMNS, isValidDescription, isValidLength } from "../constants";
 import ModalButtonGroup from "../ModalButtonGroup";
 
 export default function AddNewItemModal() {
@@ -37,7 +37,10 @@ export default function AddNewItemModal() {
       setDescriptionError("Description cannot exceed 500 character limit.");
       return;
     }
-    console.log(title, description);
+    if (!isValidLength(title, 100)) {
+      setTitleError("Title cannot exceed 100 character limit.");
+      return;
+    }
     await addTask(activeColumn, title, description);
     closeModal();
   };

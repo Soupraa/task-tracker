@@ -83,7 +83,7 @@ export default function Draggable({ children, onDragEnd, item }) {
         </div>
       </div>
       <div>
-        <h3 className="text-2xl font-oswald break-words tracking-wide">
+        <h3 className="text-xl font-oswald break-words tracking-wide">
           {item.title}
         </h3>
         <div className="text-sm whitespace-normal break-words mt-1.5">

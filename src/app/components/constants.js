@@ -10,3 +10,10 @@ export const isValidDescription = (s) => {
   }
   return true;
 };
+
+export const isValidLength = (s, length) => {
+  if (s.length > length) {
+    return false;
+  }
+  return true;
+};
