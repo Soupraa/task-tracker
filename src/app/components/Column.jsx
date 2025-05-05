@@ -25,7 +25,7 @@ export default function Column({ id, title, children, onDrop, count}) {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="flex flex-col p-4 rounded-xl min-h-96 max-w-72 min-w-56"
+      className="flex flex-col p-4 rounded-xl max-w-72 min-w-56 h-fit min-h-8/12"
       style={{
         backgroundColor: isActive ? "#fff" : "#f8fafc",
         border: `1px solid ${isActive ? "black" : "#94a3b8"}`,

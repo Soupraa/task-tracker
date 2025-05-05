@@ -84,7 +84,7 @@ export default function DashboardsNavigator() {
       </div>
 
       {currentDashboardId && (
-        <div className="px-3 pt-4 h-dvh">
+        <div className="h-dvh">
           <Dashboard dashboardId={currentDashboardId} />
         </div>
       )}

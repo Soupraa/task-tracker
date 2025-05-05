@@ -48,15 +48,15 @@ export default function AddNewItemModal() {
   return (
     <div>
       <button
-        className="border-2 px-4 py-2 w-fit font-jersey rounded-xl tracking-wide text-lg hover:bg-amber-100 transition-all cursor-pointer"
+        className="border-y-1 px-4 py-2 w-full font-jersey tracking-wide text-2xl hover:bg-gray-200 transition-all cursor-pointer"
         type="button"
         onClick={openModal}
       >
-        New task
+        New Task 
       </button>
       <dialog ref={modalRef} id="my_modal_2" className="modal scrollbar-hide">
         <div className="modal-box h-[680px] max-w-md p-12 font-inter">
-          <h1 className="text-3xl font-jersey mb-2">Add new task</h1>
+          <h1 className="text-3xl font-jersey mb-2">Add a new task</h1>
 
           <form onSubmit={handleSubmit}>
             <label className="text-sm font-semibold tracking-wide">Title</label>

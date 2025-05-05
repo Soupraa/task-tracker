@@ -3,31 +3,41 @@ import { Plus } from "lucide-react";
 import ModalButtonGroup from "../ModalButtonGroup";
 import useDashboardStore from "@/app/store/useDashboardStore";
 import { isValidLength } from "../constants";
+import ColorSelector from "../ColorSelector";
 
-export default function AddNewDashboardModal() {
+export default function AddNewTagModal() {
   const { addNewDashboard } = useDashboardStore();
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedColorError, setSelectedColorError] = useState("");
 
-  const openModal = () => {
+  const clearStates = () => {
     setTitle("");
     setTitleError("");
+    setSelectedColor(null);
+    setSelectedColorError("");
+  }
+  const openModal = () => {
+    clearStates();
     setIsOpen(true);
     modalRef.current?.showModal();
   };
 
   const closeModal = () => {
-    setTitle("");
-    setTitleError("");
+    clearStates();
     setIsOpen(false);
     modalRef.current?.close();
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setTitleError("");
+    setSelectedColorError("");
     //validation
+    console.log('Selected color:', selectedColor)
     if (!title.trim()) {
       setTitleError("Name is required.");
       return;
@@ -36,20 +46,22 @@ export default function AddNewDashboardModal() {
       setTitleError("Name cannot exceed 30 character limit.");
       return;
     }
-    await addNewDashboard(title);
+    if(!selectedColor){
+      setSelectedColorError("Please select a color for the tag.");
+      return;
+    }
+
     closeModal();
   };
 
   return (
     <>
-      <div className="tooltip" data-tip="Add new dashboard">
-        <button
-          onClick={openModal}
-          className={
-            "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all"
-          }
-        >
-          <Plus />
+      <div
+        className="tooltip transition-all duration-300 ease-in-out hover:text-green-500 my-auto"
+        data-tip="Add tag"
+      >
+        <button className="cursor-pointer" onClick={openModal}>
+          <Plus className="inline items-center" />
         </button>
       </div>
       <dialog
@@ -62,8 +74,8 @@ export default function AddNewDashboardModal() {
               : "opacity-0 scale-90"
           }`}
       >
-        <div className="dark:bg-amber-300 h-[380px] max-w-2xl p-12 font-inter">
-          <h1 className="text-3xl font-jersey mb-2">Add a new dashboard</h1>
+        <div className="dark:bg-amber-300 h-[560px] max-w-2xl p-12 font-inter">
+          <h1 className="text-3xl font-jersey mb-2">Add a new tag</h1>
 
           <form onSubmit={handleSubmit}>
             <label className="text-sm font-semibold tracking-wide">Name</label>
@@ -78,7 +90,14 @@ export default function AddNewDashboardModal() {
             {titleError && (
               <p className="text-red-500 text-sm my-2">{titleError}</p>
             )}
-            <div className="mb-5" />
+            <div className="mb-8" />
+
+            <label className="text-sm font-semibold tracking-wide">Color</label>
+            <ColorSelector selected={selectedColor} setSelected={setSelectedColor}/>
+            {selectedColorError && (
+              <p className="text-red-500 text-sm my-4">{selectedColorError}</p>
+            )}
+            <div className="mb-12" />
             <ModalButtonGroup
               leftLabel={"Close"}
               rightLabel={"Add"}

@@ -6,6 +6,7 @@ const DEFAULT_DATA = [
   {
     id: "defaultId",
     title: "dashboard",
+    tags: [],
     todo: [
       {
         id: "welcome",

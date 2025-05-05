@@ -23,6 +23,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/react": "19.1.2",
     "concurrently": "^9.1.2",
     "daisyui": "^5.0.28",
     "electron": "^35.2.0",

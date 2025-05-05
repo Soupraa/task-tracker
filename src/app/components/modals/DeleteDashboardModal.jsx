@@ -33,12 +33,12 @@ export default function DeleteDashboardModal({
   return (
     <>
       <dialog ref={modalRef} id="my_modal_2" className="modal scrollbar-hide">
-        <div className="modal-box h-[300px] max-w-md p-12 font-inter">
+        <div className="modal-box h-[420px] max-w-md p-12 font-inter text-center">
           <h1 className="text-3xl font-jersey mb-2">Are you sure you want to delete</h1>
-          <h2 className="text-3xl font-jersey mb-2 text-center">{dashboardTitle} </h2>
-          <p className="text-center font-inter text-gray-600">You will lose all tasks in this dashboard.</p>
+          <h2 className="text-3xl font-jersey mb-10 text-center">{dashboardTitle} </h2>
+          <p className="text-center font-inter text-gray-600">You will lose all your data related to this dashboard.</p>
           <form onSubmit={handleSubmit}>
-            <div className="mb-10" />
+            <div className="mb-5" />
             <ModalButtonGroup
               leftLabel={"Close"}
               rightLabel={"Delete"}

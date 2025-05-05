@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useDashboardStore from "../../store/useDashboardStore";
 import ModalButtonGroup from "../ModalButtonGroup";
+import { isValidLength } from "../constants";
 
 export default function EditDashboardModal({
   dashboardId,
@@ -24,6 +25,11 @@ export default function EditDashboardModal({
     //validation
     if (!title.trim()) {
       setTitleError("Name is required.");
+      return
+    }
+
+    if (!isValidLength(title, 30)) {
+      setTitleError("Name cannot exceed 30 character limit.");
       return;
     }
     editExistingDashboard(dashboardId, title);
@@ -49,7 +55,7 @@ export default function EditDashboardModal({
             <input
               name="name"
               type="text"
-              placeholder="Title"
+              placeholder="Name"
               className="w-full bg-slate-100 rounded-xl mt-2 h-10 p-2 text-black"
               value={title}
               onChange={(e) => setTitle(e.target.value)}

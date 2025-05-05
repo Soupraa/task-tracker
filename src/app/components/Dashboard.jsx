@@ -12,9 +12,9 @@ export default function Dashboard({ dashboardId }) {
   }, []);
   const ParagraphStyle = "text-sm";
   return (
-    <>
+    <div className="flex h-dvh">
       <ToolBar />
-      <div className="flex gap-6 max-w-4xl m-auto justify-center pt-2">
+      <div className="flex gap-6 max-w-4xl justify-center pt-8 mx-auto">
         {columns && (
           <>
             <Column
@@ -58,6 +58,6 @@ export default function Dashboard({ dashboardId }) {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
