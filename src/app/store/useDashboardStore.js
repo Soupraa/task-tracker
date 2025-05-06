@@ -4,6 +4,7 @@ const useDashboardStore = create((set, get) => ({
   currentDashboardId: null, // Tracks which dashboard is being viewed
   dashboards: [], // Stores all dashboards data
   dashboardToEditId: null,
+  
   //initalise all dashboards
   initializeDashboards: async () => {
     try {
@@ -14,6 +15,7 @@ const useDashboardStore = create((set, get) => ({
           dashboards: data.map((d) => ({
             id: d.id,
             title: d.title,
+            tags: d.tags,
             todo: d.todo,
             progress: d.progress,
             done: d.done,
@@ -52,13 +54,13 @@ const useDashboardStore = create((set, get) => ({
     get().saveDashboards();
   },
   setDashboardToEdit: (dashboardId) => {
-    console.log(dashboardId);
     set({ dashboardToEditId: dashboardId });
   },
   addNewDashboard: async (dashboardName) => {
     const newDashboard = {
       id: Date.now().toString(),
       title: dashboardName,
+      tags: [],
       todo: [],
       progress: [],
       done: [],
@@ -77,8 +79,8 @@ const useDashboardStore = create((set, get) => ({
     const data = await window.electronAPI?.loadTasks();
     if (!data) return;
 
-    const newDashboards = data.filter(d => d.id !== dashboardId);
-    set({dashboards: newDashboards});
+    const newDashboards = data.filter((d) => d.id !== dashboardId);
+    set({ dashboards: newDashboards });
     get().saveDashboards();
   },
 }));

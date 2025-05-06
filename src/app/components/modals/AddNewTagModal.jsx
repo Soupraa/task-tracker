@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { Plus } from "lucide-react";
 import ModalButtonGroup from "../ModalButtonGroup";
-import useDashboardStore from "@/app/store/useDashboardStore";
 import { isValidLength } from "../constants";
 import ColorSelector from "../ColorSelector";
 
 export default function AddNewTagModal() {
-  const { addNewDashboard } = useDashboardStore();
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
   const [titleError, setTitleError] = useState("");

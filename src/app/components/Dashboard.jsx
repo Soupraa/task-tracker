@@ -4,16 +4,22 @@ import Draggable from "../components/Draggable";
 import Column from "./Column";
 import useTaskStore from "../store/useTaskStore";
 import ToolBar from "./ToolBar";
+import useTagStore from "../store/useTagStore";
 
 export default function Dashboard({ dashboardId }) {
   const { columns, moveTask, loadTasksByDashboardId } = useTaskStore();
+  const { getDashboardTags, currentTags } = useTagStore();
+
   useEffect(() => {
     loadTasksByDashboardId(dashboardId);
-  }, []);
+    getDashboardTags(dashboardId);
+
+  }, [dashboardId]);
+
   const ParagraphStyle = "text-sm";
   return (
     <div className="flex h-dvh">
-      <ToolBar />
+      <ToolBar tagsArr={currentTags}/>
       <div className="flex gap-6 max-w-4xl justify-center pt-8 mx-auto">
         {columns && (
           <>
