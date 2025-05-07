@@ -62,7 +62,7 @@ export default function AddNewDashboardModal() {
               : "opacity-0 scale-90"
           }`}
       >
-        <div className="dark:bg-amber-300 h-[380px] max-w-2xl p-12 font-inter">
+        <div className="dark:bg-amber-300 h-[380px] max-w-2xl p-12 font-inter min-w-[250px]">
           <h1 className="text-3xl font-jersey mb-2">Add a new dashboard</h1>
 
           <form onSubmit={handleSubmit}>

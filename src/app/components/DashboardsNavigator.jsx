@@ -66,6 +66,7 @@ export default function DashboardsNavigator() {
       <div className="w-full bg-gray-300 pt-10">
         {dashboards.map((d) => (
           <button
+            title="right click to edit"
             key={d.id}
             onClick={() => handleDashboardChange(d.id)}
             className={`${buttonStyle} ${

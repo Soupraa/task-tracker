@@ -16,7 +16,7 @@ export default function EditItemModal({ item }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const { updateTask } = useTaskStore();
-  const { currentTags } = useTagStore(); // global tag list (from dashboard)
+  const { currentTags } = useTagStore(); 
 
   const openModal = () => {
     setTitle(item.title);
@@ -78,7 +78,7 @@ export default function EditItemModal({ item }) {
         }`}
       >
         <div className="dark:bg-amber-300 h-[680px] max-w-2xl p-12 font-inter overflow-y-auto">
-          <h1 className="text-3xl font-jersey mb-4">Update Task</h1>
+          <h1 className="text-3xl font-jersey mb-4">Update task</h1>
           <form onSubmit={handleSubmit}>
             <label className="text-sm font-semibold tracking-wide">Title</label>
             <input

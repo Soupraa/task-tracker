@@ -10,12 +10,12 @@ const useTaskStore = create((set, get) => ({
   storeDashboardId: null,
   storeDashboardTitle: null,
 
-  addTask: (columnId, taskTitle, taskText) => {
+  addTask: (columnId, updates) => {
     const newTask = {
       id: Date.now().toString(),
-      title: taskTitle,
-      text: taskText,
-      tags: [], // <-- initialize tags
+      title: updates.title,
+      text: updates.text,
+      tags: updates.tags || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

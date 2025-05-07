@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import useTaskStore from "../../store/useTaskStore";
 import { COLUMNS, isValidDescription, isValidLength } from "../constants";
 import ModalButtonGroup from "../ModalButtonGroup";
+import { TagSelector } from "../TagSelector";
+import useTagStore from "@/app/store/useTagStore";
 
 export default function AddNewItemModal() {
   const modalRef = React.useRef(null);
@@ -11,10 +13,13 @@ export default function AddNewItemModal() {
   const [descriptionError, setDescriptionError] = useState("");
   const [activeColumn, setActiveColumn] = useState(COLUMNS.TODO);
   const { addTask } = useTaskStore();
+  const { currentTags } = useTagStore();
+  const [selectedTags, setSelectedTags] = useState([]);
 
   const openModal = () => {
     setTitleError("");
     setTitle("");
+    setSelectedTags([]);
     setDescription("");
     setDescriptionError("");
     setActiveColumn(COLUMNS.TODO);
@@ -22,6 +27,7 @@ export default function AddNewItemModal() {
   };
 
   const closeModal = () => {
+    setSelectedTags([]);
     modalRef.current?.close();
   };
 
@@ -41,7 +47,11 @@ export default function AddNewItemModal() {
       setTitleError("Title cannot exceed 100 character limit.");
       return;
     }
-    await addTask(activeColumn, title, description);
+    await addTask(activeColumn, {
+      title: title,
+      text: description,
+      tags: selectedTags,
+    });
     closeModal();
   };
 
@@ -52,10 +62,10 @@ export default function AddNewItemModal() {
         type="button"
         onClick={openModal}
       >
-        New Task 
+        New Task
       </button>
       <dialog ref={modalRef} id="my_modal_2" className="modal scrollbar-hide">
-        <div className="modal-box h-[680px] max-w-md p-12 font-inter">
+        <div className="modal-box h-[780px] max-w-2xl p-12 font-inter min-w-[250px]">
           <h1 className="text-3xl font-jersey mb-2">Add a new task</h1>
 
           <form onSubmit={handleSubmit}>
@@ -78,7 +88,7 @@ export default function AddNewItemModal() {
             <textarea
               name="description"
               placeholder="Description"
-              className="w-full bg-slate-100 rounded-xl mt-2 h-40 p-2 text-black"
+              className="w-full bg-slate-100 rounded-xl mt-2 h-35 p-2 text-black"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -99,6 +109,12 @@ export default function AddNewItemModal() {
               <option value="done">Done</option>
             </select>
             <div className="mb-5" />
+            <TagSelector
+              availableTags={currentTags}
+              selectedTags={selectedTags}
+              onChange={setSelectedTags}
+            />
+              <div className="mb-8" />
             <ModalButtonGroup
               leftLabel={"Close"}
               rightLabel={"Add"}

@@ -49,7 +49,7 @@ export default function EditDashboardModal({
     <>
       <dialog ref={modalRef} id="my_modal_2" className="modal scrollbar-hide">
         <div className="modal-box h-[380px] max-w-md p-12 font-inter">
-          <h1 className="text-3xl font-jersey mb-2">Update Dashboard</h1>
+          <h1 className="text-3xl font-jersey mb-2">Update dashboard</h1>
           <form onSubmit={handleSubmit}>
             <label className="text-sm font-semibold tracking-wide">Name</label>
             <input

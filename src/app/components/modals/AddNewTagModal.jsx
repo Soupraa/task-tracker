@@ -44,8 +44,8 @@ export default function AddNewTagModal() {
       setTitleError("Name is required.");
       return;
     }
-    if (!isValidLength(title, 30)) {
-      setTitleError("Name cannot exceed 30 character limit.");
+    if (!isValidLength(title, 25)) {
+      setTitleError("Name cannot exceed 25 character limit.");
       return;
     }
     if (!selectedColor) {
@@ -73,7 +73,7 @@ export default function AddNewTagModal() {
       <dialog
         ref={modalRef}
         id="my_modal_2"
-        className={`text-black m-auto rounded-md w-96 min-w-fit transition-all duration-300 ease-out
+        className={`text-black m-auto rounded-md w-96 min-w-[280px] transition-all duration-300 ease-out
           ${
             isOpen
               ? "opacity-100 scale-100 backdrop:bg-black/30 "
