@@ -17,7 +17,7 @@ export default function ToolBar({ tagsArr }) {
               <div
                 key={k}
                 style={{ backgroundColor: i.color }}
-                className="w-full p-2 font-inter my-1"
+                className="w-full p-2 font-inter my-1 text-ellipsis overflow-hidden"
               >
                 {i.title}
               </div>

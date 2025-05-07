@@ -1,88 +1,98 @@
 import { create } from "zustand";
 
-const useDashboardStore = create((set, get) => ({
-  currentDashboardId: null, // Tracks which dashboard is being viewed
-  dashboards: [], // Stores all dashboards data
-  dashboardToEditId: null,
-  
-  //initalise all dashboards
-  initializeDashboards: async () => {
+const useDashboardStore = create((set, get) => {
+  // Helpers
+  const loadDashboardsFromDisk = async () => {
     try {
       const data = await window.electronAPI?.loadTasks();
-      if (data && Array.isArray(data)) {
-        set({
-          currentDashboardId: data[0].id,
-          dashboards: data.map((d) => ({
-            id: d.id,
-            title: d.title,
-            tags: d.tags,
-            todo: d.todo,
-            progress: d.progress,
-            done: d.done,
-            updatedAt: d.updatedAt,
-          })),
-        });
-        console.log("SAVING DASHBOARDS");
-        get().saveDashboards();
-
-        return true;
-      }
-      return false;
+      return Array.isArray(data) ? data : [];
     } catch (error) {
-      console.error("Error initializing dashboards:", error);
-      return false;
+      console.error("Failed to load dashboards:", error);
+      return [];
     }
-  },
-  setActiveDashboard: (dashboardId) => {
-    set({ currentDashboardId: dashboardId });
-  },
-  saveDashboards: async () => {
-    await window.electronAPI.saveDashboards(get().dashboards);
-  },
-  editExistingDashboard: async (dashboardId, newTitle) => {
-    const data = await window.electronAPI?.loadTasks();
-    if (!data) return;
+  };
 
-    const updatedDashboards = data.map((d) => {
-      if (d.id === dashboardId) {
-        return { ...d, title: newTitle };
-      }
-      return d;
-    });
+  const persistDashboards = async (dashboards) => {
+    await window.electronAPI?.saveDashboards(dashboards);
+  };
 
-    set({ dashboards: updatedDashboards });
-    get().saveDashboards();
-  },
-  setDashboardToEdit: (dashboardId) => {
-    set({ dashboardToEditId: dashboardId });
-  },
-  addNewDashboard: async (dashboardName) => {
-    const newDashboard = {
-      id: Date.now().toString(),
-      title: dashboardName,
-      tags: [],
-      todo: [],
-      progress: [],
-      done: [],
-      updatedAt: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-    };
-    const data = await window.electronAPI?.loadTasks();
-    if (!data) return;
+  return {
+    currentDashboardId: null,
+    dashboards: [],
+    dashboardToEditId: null,
 
-    data.push(newDashboard);
-    set({ dashboards: data });
-    get().saveDashboards();
-  },
+    initializeDashboards: async () => {
+      const data = await loadDashboardsFromDisk();
+      if (data.length === 0) return false;
 
-  deleteDashboard: async (dashboardId) => {
-    const data = await window.electronAPI?.loadTasks();
-    if (!data) return;
+      set({
+        currentDashboardId: data[0].id,
+        dashboards: data.map((d) => ({
+          id: d.id,
+          title: d.title,
+          tags: d.tags,
+          todo: d.todo,
+          progress: d.progress,
+          done: d.done,
+          updatedAt: d.updatedAt,
+        })),
+      });
 
-    const newDashboards = data.filter((d) => d.id !== dashboardId);
-    set({ dashboards: newDashboards });
-    get().saveDashboards();
-  },
-}));
+      console.log("SAVING DASHBOARDS");
+      await persistDashboards(get().dashboards);
+      return true;
+    },
+
+    setActiveDashboard: (dashboardId) => {
+      set({ currentDashboardId: dashboardId });
+    },
+
+    saveDashboards: async () => {
+      await persistDashboards(get().dashboards);
+    },
+
+    editExistingDashboard: async (dashboardId, newTitle) => {
+      const dashboards = await loadDashboardsFromDisk();
+
+      const updated = dashboards.map((d) =>
+        d.id === dashboardId ? { ...d, title: newTitle } : d
+      );
+
+      set({ dashboards: updated });
+      await persistDashboards(updated);
+    },
+
+    setDashboardToEdit: (dashboardId) => {
+      set({ dashboardToEditId: dashboardId });
+    },
+
+    addNewDashboard: async (dashboardName) => {
+      const dashboards = await loadDashboardsFromDisk();
+
+      const newDashboard = {
+        id: Date.now().toString(),
+        title: dashboardName,
+        tags: [],
+        todo: [],
+        progress: [],
+        done: [],
+        updatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
+      };
+
+      const updated = [...dashboards, newDashboard];
+      set({ dashboards: updated });
+      await persistDashboards(updated);
+    },
+
+    deleteDashboard: async (dashboardId) => {
+      const dashboards = await loadDashboardsFromDisk();
+
+      const filtered = dashboards.filter((d) => d.id !== dashboardId);
+      set({ dashboards: filtered });
+      await persistDashboards(filtered);
+    },
+  };
+});
 
 export default useDashboardStore;

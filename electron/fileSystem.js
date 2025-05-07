@@ -56,6 +56,7 @@ const saveTasks = (dashboardData, columnData) => {
     const updatedDashboard = {
       id: dashboardData.id,
       title: dashboardData.title,
+      tags: dashboardData.tags,
       todo: [...columnData.todo],
       progress: [...columnData.progress],
       done: [...columnData.done],

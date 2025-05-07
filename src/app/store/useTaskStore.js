@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import useTagStore from "./useTagStore"; // or the correct path
 
 const useTaskStore = create((set, get) => ({
   columns: {
@@ -14,7 +15,9 @@ const useTaskStore = create((set, get) => ({
       id: Date.now().toString(),
       title: taskTitle,
       text: taskText,
+      tags: [], // <-- initialize tags
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     set((state) => ({
@@ -24,10 +27,12 @@ const useTaskStore = create((set, get) => ({
       },
     }));
 
-    // Auto-save
     get().saveTasks();
   },
+
   updateTask: (itemId, updates) => {
+    console.log("Incoming updates:", updates);
+
     set((state) => {
       const newColumns = { ...state.columns };
       let wasUpdated = false;
@@ -39,6 +44,7 @@ const useTaskStore = create((set, get) => ({
             return {
               ...item,
               ...updates,
+              tags: updates.tags ?? item.tags, // preserve existing tags
               updatedAt: new Date().toISOString(),
             };
           }
@@ -47,16 +53,18 @@ const useTaskStore = create((set, get) => ({
       });
 
       if (wasUpdated) {
-        // Auto-save only if something changed
         get().saveTasks(newColumns);
         return { columns: newColumns };
       }
+
       return state;
     });
   },
+
   moveTask: (itemId, targetColumn) => {
     set((state) => {
       const newColumns = { ...state.columns };
+
       // Remove from current column
       Object.keys(newColumns).forEach((columnId) => {
         newColumns[columnId] = newColumns[columnId].filter(
@@ -67,34 +75,32 @@ const useTaskStore = create((set, get) => ({
       // Find and add to target column
       const allItems = Object.values(state.columns).flat();
       const movedItem = allItems.find((item) => item.id === itemId);
+
       if (movedItem) {
         newColumns[targetColumn] = [...newColumns[targetColumn], movedItem];
       }
-      // Auto-save
-      get().saveTasks(newColumns);
 
+      get().saveTasks(newColumns);
       return { columns: newColumns };
     });
   },
+
   deleteTask: (itemId) => {
     set((state) => {
       const newColumns = { ...state.columns };
       let wasDeleted = false;
 
-      // Remove task from all columns
       Object.keys(newColumns).forEach((columnId) => {
         const originalLength = newColumns[columnId].length;
         newColumns[columnId] = newColumns[columnId].filter(
           (item) => item.id !== itemId
         );
-
         if (newColumns[columnId].length !== originalLength) {
           wasDeleted = true;
         }
       });
 
       if (wasDeleted) {
-        // Auto-save only if something was actually deleted
         get().saveTasks(newColumns);
         return { columns: newColumns };
       }
@@ -102,11 +108,21 @@ const useTaskStore = create((set, get) => ({
       return state;
     });
   },
+
   saveTasks: async (newColumns) => {
     try {
+      const state = get();
+      const currentTags = useTagStore.getState().currentTags;
+  
+      const currentDashboard = {
+        id: state.storeDashboardId,
+        title: state.storeDashboardTitle,
+        tags: currentTags, 
+      };
+  
       await window.electronAPI.saveTasks(
-        { id: get().storeDashboardId, title: get().storeDashboardTitle },
-        newColumns ? newColumns : get().columns
+        currentDashboard,
+        newColumns ?? state.columns
       );
     } catch (error) {
       console.error("Save failed:", error);
@@ -121,9 +137,9 @@ const useTaskStore = create((set, get) => ({
         storeDashboardId: id,
         storeDashboardTitle: dashboard.title,
         columns: {
-          todo: dashboard?.todo || [],
-          progress: dashboard?.progress || [],
-          done: dashboard?.done || [],
+          todo: dashboard.todo || [],
+          progress: dashboard.progress || [],
+          done: dashboard.done || [],
         },
       });
     }

@@ -21,12 +21,6 @@ export default function Draggable({ children, onDragEnd, item }) {
     setIsDragging(false);
     if (onDragEnd) onDragEnd();
   };
-
-  // const toggleMenu = (e) => {
-  //   e.stopPropagation(); // Prevent this click from triggering the document click handler
-  //   setShowMenu(!showMenu);
-  // };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       // Close menu if clicked outside of menu or menu button
@@ -88,6 +82,19 @@ export default function Draggable({ children, onDragEnd, item }) {
         </h3>
         <div className="text-sm whitespace-normal break-words mt-1.5">
           {children}
+        </div>
+        <div className="mt-4 gap-1 flex-wrap flex">
+          {item.tags?.map((t, k) => {
+            return (
+              <div
+                key={k}
+                style={{ backgroundColor: t.color }}
+                className="w-fit p-1 font-inter my-0.5 text-xs inline-flex"
+              >
+                {t.title}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

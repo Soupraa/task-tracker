@@ -3,6 +3,9 @@ import { Plus } from "lucide-react";
 import ModalButtonGroup from "../ModalButtonGroup";
 import { isValidLength } from "../constants";
 import ColorSelector from "../ColorSelector";
+import useTagStore from "@/app/store/useTagStore";
+import useDashboardStore from "@/app/store/useDashboardStore";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddNewTagModal() {
   const modalRef = React.useRef(null);
@@ -11,13 +14,15 @@ export default function AddNewTagModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColor, setSelectedColor] = useState(null);
   const [selectedColorError, setSelectedColorError] = useState("");
+  const { addNewDashboardTag } = useTagStore();
+  const { currentDashboardId } = useDashboardStore();
 
   const clearStates = () => {
     setTitle("");
     setTitleError("");
     setSelectedColor(null);
     setSelectedColorError("");
-  }
+  };
   const openModal = () => {
     clearStates();
     setIsOpen(true);
@@ -34,8 +39,7 @@ export default function AddNewTagModal() {
     e.preventDefault();
     setTitleError("");
     setSelectedColorError("");
-    //validation
-    console.log('Selected color:', selectedColor)
+
     if (!title.trim()) {
       setTitleError("Name is required.");
       return;
@@ -44,11 +48,15 @@ export default function AddNewTagModal() {
       setTitleError("Name cannot exceed 30 character limit.");
       return;
     }
-    if(!selectedColor){
+    if (!selectedColor) {
       setSelectedColorError("Please select a color for the tag.");
       return;
     }
-
+    await addNewDashboardTag(currentDashboardId, {
+      id: uuidv4(),
+      title: title,
+      color: selectedColor,
+    });
     closeModal();
   };
 
@@ -91,7 +99,10 @@ export default function AddNewTagModal() {
             <div className="mb-8" />
 
             <label className="text-sm font-semibold tracking-wide">Color</label>
-            <ColorSelector selected={selectedColor} setSelected={setSelectedColor}/>
+            <ColorSelector
+              selected={selectedColor}
+              setSelected={setSelectedColor}
+            />
             {selectedColorError && (
               <p className="text-red-500 text-sm my-4">{selectedColorError}</p>
             )}
