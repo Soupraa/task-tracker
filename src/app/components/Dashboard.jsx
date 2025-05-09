@@ -1,94 +1,69 @@
-'use client'
-import { useState } from 'react';
-import Draggable from '../components/Draggable';
-import Droppable from '../components/Droppable';
+"use client";
+import { useEffect } from "react";
+import Draggable from "../components/Draggable";
+import Column from "./Column";
+import useTaskStore from "../store/useTaskStore";
+import ToolBar from "./ToolBar";
+import useTagStore from "../store/useTagStore";
 
-const initialColumns = {
-  todo: [
-    { id: 'task1', text: 'Design Homepage' },
-    { id: 'task2', text: 'Implement API' },
-  ],
-  progress: [
-    { id: 'task3', text: 'Write Documentation' },
-  ],
-  done: [
-    { id: 'task4', text: 'Setup CI/CD Pipeline' },
-  ]
-};
+export default function Dashboard({ dashboardId }) {
+  const { columns, moveTask, loadTasksByDashboardId } = useTaskStore();
+  const { getDashboardTags, currentTags } = useTagStore();
 
-export default function Dashboard() {
-  const [columns, setColumns] = useState(initialColumns);
+  useEffect(() => {
+    loadTasksByDashboardId(dashboardId);
+    getDashboardTags(dashboardId);
 
-  const handleDrop = (itemId, targetColumn) => {
-    setColumns(prev => {
-      const newColumns = { ...prev };
-      
-      // Remove from current column
-      Object.keys(newColumns).forEach(columnId => {
-        newColumns[columnId] = newColumns[columnId].filter(
-          item => item.id !== itemId
-        );
-      });
+  }, [dashboardId]);
 
-      // Find the item
-      const allItems = Object.values(prev).flat();
-      const movedItem = allItems.find(item => item.id === itemId);
-
-      // Add to target column if item exists
-      if (movedItem) {
-        newColumns[targetColumn] = [
-          ...newColumns[targetColumn],
-          movedItem
-        ];
-      }
-
-      return newColumns;
-    });
-  };
-
+  const ParagraphStyle = "text-sm";
   return (
-    <div style={{ 
-      display: 'flex', 
-      gap: '24px', 
-      padding: '24px',
-      maxWidth: '1200px',
-      margin: '0 auto'
-    }}>
-      <Droppable 
-        id="todo" 
-        title="To Do" 
-        onDrop={(itemId) => handleDrop(itemId, 'todo')}
-      >
-        {columns.todo.map(item => (
-          <Draggable key={item.id} id={item.id}>
-            {item.text}
-          </Draggable>
-        ))}
-      </Droppable>
+    <div className="flex h-dvh">
+      <ToolBar tagsArr={currentTags}/>
+      <div className="flex gap-6 max-w-4xl justify-center pt-8 mx-auto">
+        {columns && (
+          <>
+            <Column
+              id="todo"
+              title="To Do"
+              onDrop={(itemId) => moveTask(itemId, "todo")}
+              count={columns.todo.length}
+            >
+              {columns.todo.map((item) => (
+                <Draggable key={item.id} item={item}>
+                  <p className={ParagraphStyle}>{item.text}</p>
+                </Draggable>
+              ))}
+            </Column>
 
-      <Droppable 
-        id="progress" 
-        title="In Progress" 
-        onDrop={(itemId) => handleDrop(itemId, 'progress')}
-      >
-        {columns.progress.map(item => (
-          <Draggable key={item.id} id={item.id}>
-            {item.text}
-          </Draggable>
-        ))}
-      </Droppable>
+            <Column
+              id="progress"
+              title="In Progress"
+              onDrop={(itemId) => moveTask(itemId, "progress")}
+              count={columns.progress.length}
+            >
+              {columns.progress.map((item) => (
+                <Draggable key={item.id} item={item}>
+                  <p className={ParagraphStyle}>{item.text}</p>
+                </Draggable>
+              ))}
+            </Column>
 
-      <Droppable 
-        id="done" 
-        title="Done" 
-        onDrop={(itemId) => handleDrop(itemId, 'done')}
-      >
-        {columns.done.map(item => (
-          <Draggable key={item.id} id={item.id}>
-            {item.text}
-          </Draggable>
-        ))}
-      </Droppable>
+            <Column
+              id="done"
+              title="Done"
+              onDrop={(itemId) => moveTask(itemId, "done")}
+              count={columns.done.length}
+            >
+              {columns.done.map((item) => (
+                <Draggable key={item.id} item={item}>
+                  <p className={ParagraphStyle}>{item.text}</p>
+                </Draggable>
+              ))}
+            </Column>
+          </>
+        )}
+      </div>
     </div>
   );
 }
