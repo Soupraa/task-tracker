@@ -89,7 +89,7 @@ export default function Draggable({ children, onDragEnd, item }) {
               <div
                 key={k}
                 style={{ backgroundColor: t.color }}
-                className="w-fit p-1 font-inter my-0.5 text-xs inline-flex"
+                className="w-fit p-1 font-inter my-0.5 text-xs inline-flex rounded-sm"
               >
                 {t.title}
               </div>

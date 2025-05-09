@@ -4,15 +4,20 @@ import MenuItem from "@mui/material/MenuItem";
 import { EllipsisVertical } from "lucide-react";
 import useTagStore from "../store/useTagStore";
 
-export default function TagMenu({ tagId }) {
+export default function TagMenu({ tagId, setShowTagModal }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
-  const { deleteDashboardTag } = useTagStore();
+  const { deleteDashboardTag, setTagIdToEdit } = useTagStore();
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleEdit = () => {
+    setTagIdToEdit(tagId);
+    setShowTagModal(true);
+    handleClose();
   };
   const handleDelete = () => {
     deleteDashboardTag(tagId);
@@ -37,7 +42,7 @@ export default function TagMenu({ tagId }) {
         onClose={handleClose}
         disableScrollLock
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleEdit}>
           <p className="font-inter text-sm">Edit</p>
         </MenuItem>
         <MenuItem onClick={handleDelete}>
