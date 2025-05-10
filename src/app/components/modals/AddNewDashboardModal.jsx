@@ -4,7 +4,7 @@ import ModalButtonGroup from "../ModalButtonGroup";
 import useDashboardStore from "@/app/store/useDashboardStore";
 import { isValidLength } from "../constants";
 
-export default function AddNewDashboardModal() {
+export default function AddNewDashboardModal({ type }) {
   const { addNewDashboard } = useDashboardStore();
   const modalRef = React.useRef(null);
   const [title, setTitle] = useState("");
@@ -42,16 +42,31 @@ export default function AddNewDashboardModal() {
 
   return (
     <>
-      <div className="tooltip" data-tip="Add new dashboard">
-        <button
-          onClick={openModal}
-          className={
-            "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all"
-          }
-        >
-          <Plus />
-        </button>
-      </div>
+      {type === "topbar" && (
+        <div className="tooltip" data-tip="Add new dashboard">
+          <button
+            onClick={openModal}
+            className={
+              "px-4 py-2 rounded-t-2xl w-fit cursor-pointer font-oswald tracking-wide align-middle hover:bg-white transition-all"
+            }
+          >
+            <Plus />
+          </button>
+        </div>
+      )}
+      {type === "dashboard" && (
+        <div className="h-screen">
+          <div className="flex items-center justify-center h-full p-12">
+            <button
+              className="border-black border-[1px] p-20 border-dashed rounded-2xl hover:bg-gray-300 transition-all cursor-pointer"
+              onClick={openModal}
+            >
+              <p className="text-2xl font-jersey">Start by creating a </p>
+              <h2 className="text-5xl font-jersey">new dashboard</h2>
+            </button>
+          </div>
+        </div>
+      )}
       <dialog
         ref={modalRef}
         id="my_modal_2"

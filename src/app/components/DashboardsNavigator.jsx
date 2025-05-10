@@ -68,7 +68,7 @@ export default function DashboardsNavigator() {
           OnTrack.
         </h1>
 
-        <div className="flex overflow-x-auto no-scrollbar">
+        <div className="flex no-scrollbar">
           {dashboards.map((d) => (
             <button
               title="right click to edit"
@@ -86,15 +86,16 @@ export default function DashboardsNavigator() {
             </button>
           ))}
 
-          {dashboards.length < 6 && <AddNewDashboardModal />}
+          {dashboards.length < 6 && <AddNewDashboardModal type="topbar"/>}
         </div>
       </div>
 
-      {currentDashboardId && (
+      {currentDashboardId && dashboards.length > 0 && (
         <div className="h-dvh">
           <Dashboard dashboardId={currentDashboardId} />
         </div>
       )}
+      {dashboards.length === 0 && <AddNewDashboardModal type="dashboard"/>}
     </div>
   );
 }

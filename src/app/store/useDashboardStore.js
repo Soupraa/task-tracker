@@ -82,6 +82,7 @@ const useDashboardStore = create((set, get) => {
 
       const updated = [...dashboards, newDashboard];
       set({ dashboards: updated });
+      get().setActiveDashboard(newDashboard.id);
       await persistDashboards(updated);
     },
 
@@ -89,6 +90,15 @@ const useDashboardStore = create((set, get) => {
       const dashboards = await loadDashboardsFromDisk();
 
       const filtered = dashboards.filter((d) => d.id !== dashboardId);
+
+      const newActive = filtered.length > 0 ? filtered[0] : null;
+
+      if (newActive) {
+        get().setActiveDashboard(newActive.id);
+      } else {
+        get().setActiveDashboard(null);
+      }
+
       set({ dashboards: filtered });
       await persistDashboards(filtered);
     },

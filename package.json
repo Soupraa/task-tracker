@@ -45,7 +45,7 @@
   "build": {
     "appId": "com.on.track",
     "productName": "OnTrack",
-    "icon": "electron/icon",
+    "icon": "electron/icons/icon.ico",
     "files": [
       "electron/**/*",
       "out/**/*",
@@ -61,7 +61,9 @@
       "target": "nsis"
     },
     "mac": {
-      "target": "dmg"
+      "target": "dmg",
+      "icon": "electron/icons/icon.ico",
+      "category": "public.app-category.productivity"
     },
     "linux": {
       "target": "AppImage"
