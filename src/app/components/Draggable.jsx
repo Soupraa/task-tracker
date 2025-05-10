@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { X } from "lucide-react";
+import { ChevronRight, ChevronsDownUp, Strikethrough, X } from "lucide-react";
 import useTaskStore from "../store/useTaskStore";
 import EditItemModal from "./modals/EditItemModal";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 
 export default function Draggable({ children, onDragEnd, item }) {
   const [isDragging, setIsDragging] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const strike = item.strike;
+  const isOpen = item.isOpen ?? true;
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
-  const { deleteTask } = useTaskStore();
+  const { deleteTask, updateTask } = useTaskStore();
 
   const handleDragStart = (e) => {
     e.dataTransfer.setData("text/plain", item.id);
@@ -21,38 +23,25 @@ export default function Draggable({ children, onDragEnd, item }) {
     setIsDragging(false);
     if (onDragEnd) onDragEnd();
   };
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Close menu if clicked outside of menu or menu button
-      if (
-        menuRef.current &&
-        !menuRef.current.contains(event.target) &&
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target)
-      ) {
-        setShowMenu(false);
-      }
-    };
 
-    // Add event listener when menu is open
-    if (showMenu) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    // Clean up
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showMenu]);
   const handleDelete = async () => {
     await deleteTask(item.id);
   };
+
+  const handleStrike = async () => {
+    await updateTask(item.id, { strike: !strike });
+  };
+
+  const handleCollapse = async () => {
+    await updateTask(item.id, { isOpen: !isOpen });
+  };
+
   return (
     <div
       draggable
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
-      className="relative cursor-grab p-2 m-2 bg-amber-100 border-1 rounded-b-lg font-inter overflow-visible text-black"
+      className="relative cursor-grab p-2 m-2 bg-amber-100 border rounded-b-lg font-inter overflow-visible text-black"
       style={{
         boxShadow: isDragging
           ? "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)"
@@ -63,12 +52,32 @@ export default function Draggable({ children, onDragEnd, item }) {
         userSelect: "none",
       }}
     >
-      <div className="flex">
-        <div className="inline-flex justify-end w-full gap-1">
+      <div className="flex justify-between items-start">
+        <button
+          onClick={handleCollapse}
+          className="cursor-pointer transition-all duration-300 ease-in-out hover:text-red-500 w-fit h-fit"
+        >
+          <div className="tooltip" data-tip={isOpen ? "Collapse" : "Expand"}>
+            <ChevronRight
+              className={`w-5 transition-transform duration-300 ${
+                isOpen ? "rotate-90" : ""
+              }`}
+            />{" "}
+          </div>
+        </button>
+        <div className="flex gap-1">
+          <button
+            onClick={handleStrike}
+            className="cursor-pointer transition-all duration-300 ease-in-out hover:text-red-500 w-fit h-fit"
+          >
+            <div className="tooltip" data-tip="Strike">
+              <Strikethrough className="w-5" />
+            </div>
+          </button>
           <EditItemModal item={item} />
           <button
             onClick={handleDelete}
-            className="cursor-pointer transition-all duration-300 ease-in-out hover:text-red-500 rounded-l w-fit h-fit"
+            className="cursor-pointer transition-all duration-300 ease-in-out hover:text-red-500 w-fit h-fit"
           >
             <div className="tooltip" data-tip="Delete">
               <X className="w-5" />
@@ -76,25 +85,46 @@ export default function Draggable({ children, onDragEnd, item }) {
           </button>
         </div>
       </div>
+
       <div>
-        <h3 className="text-xl font-oswald break-words tracking-wide">
-          {item.title}
-        </h3>
-        <div className="text-sm whitespace-normal break-words mt-1.5">
-          {children}
-        </div>
-        <div className="mt-4 gap-1 flex-wrap flex">
-          {item.tags?.map((t, k) => {
-            return (
-              <div
-                key={k}
-                style={{ backgroundColor: t.color }}
-                className="w-fit p-1 font-inter my-0.5 text-xs inline-flex rounded-sm"
-              >
-                {t.title}
-              </div>
-            );
-          })}
+        <Accordion
+          expanded={isOpen}
+          onChange={handleCollapse}
+          disableGutters
+          elevation={0}
+          square
+          sx={{ background: "none", border: "none", boxShadow: "none" }}
+        >
+          <AccordionSummary
+            id={`panel-${item.id}`}
+            style={{
+              overflowWrap: "break-word",
+              wordBreak: "break-word",
+              whiteSpace: "normal",
+              display: "block",
+              padding: 0,
+            }}
+          >
+            <h3 className="text-xl font-oswald break-words tracking-wide">
+              {strike ? <s>{item.title}</s> : item.title}
+            </h3>
+          </AccordionSummary>
+          <AccordionDetails style={{ padding: "0" }}>
+            <div className="text-sm whitespace-normal break-words">
+              {strike ? <s>{children}</s> : children}
+            </div>
+          </AccordionDetails>
+        </Accordion>
+        <div className="mt-2 gap-1 flex flex-wrap">
+          {item.tags?.map((t, k) => (
+            <div
+              key={k}
+              style={{ backgroundColor: t.color }}
+              className="w-fit p-1 font-inter my-0.5 text-xs inline-flex rounded-sm"
+            >
+              {t.title}
+            </div>
+          ))}
         </div>
       </div>
     </div>

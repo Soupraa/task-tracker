@@ -17,7 +17,7 @@ const useTagStore = create((set, get) => {
   const persistDashboards = async (dashboards) => {
     await window.electronAPI?.saveDashboards(dashboards);
   };
-
+  
   return {
     currentTags: [],
     tagIdToEdit: null,

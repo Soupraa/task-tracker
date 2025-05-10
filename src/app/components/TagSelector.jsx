@@ -20,7 +20,7 @@ export const TagSelector = ({ availableTags, selectedTags, onChange }) => {
             <label
               key={k}
               style={{ backgroundColor: tag.color }}
-              className="flex items-center gap-2 px-3 py-1 rounded-full cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1 rounded-sm cursor-pointer"
             >
               <input
                 type="checkbox"
