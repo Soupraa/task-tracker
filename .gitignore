@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Ignore build output directories
+/releases/
+/dist/
+/build/
+/out/
+*.exe
+*.dmg
+*.AppImage

@@ -2,19 +2,33 @@
   {
     "id": "defaultId",
     "title": "dashboard",
-    "tags": [],
+    "tags": [
+      {
+        "id": "995b4a32-2da8-410e-b20c-ed711c637f27",
+        "title": "dasd",
+        "color": "#A78BFA"
+      }
+    ],
     "todo": [
       {
         "id": "welcome",
         "title": "Welcome to OnTrack",
         "text": "Start creating tasks and tags, happy tasking :)",
         "isOpen": true,
-        "updatedAt": "2025-05-10T06:33:59.628Z"
+        "strike": false,
+        "tags": [
+          {
+            "id": "995b4a32-2da8-410e-b20c-ed711c637f27",
+            "title": "dasd",
+            "color": "#A78BFA"
+          }
+        ],
+        "updatedAt": "2025-05-10T06:34:39.733Z"
       }
     ],
     "progress": [],
     "done": [],
-    "updatedAt": "2025-05-10T06:33:59.629Z"
+    "updatedAt": "2025-05-10T06:34:39.733Z"
   },
   {
     "id": "1746858805552",
