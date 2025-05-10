@@ -1,0 +1,39 @@
+[
+  {
+    "id": "defaultId",
+    "title": "dashboard",
+    "tags": [],
+    "todo": [
+      {
+        "id": "welcome",
+        "title": "Welcome to OnTrack",
+        "text": "Start creating tasks and tags, happy tasking :)",
+        "isOpen": true,
+        "updatedAt": "2025-05-10T06:33:59.628Z"
+      }
+    ],
+    "progress": [],
+    "done": [],
+    "updatedAt": "2025-05-10T06:33:59.629Z"
+  },
+  {
+    "id": "1746858805552",
+    "title": "asda",
+    "tags": [],
+    "todo": [],
+    "progress": [],
+    "done": [],
+    "updatedAt": "2025-05-10T06:33:25.552Z",
+    "createdAt": "2025-05-10T06:33:25.552Z"
+  },
+  {
+    "id": "1746858807129",
+    "title": "asdasd",
+    "tags": [],
+    "todo": [],
+    "progress": [],
+    "done": [],
+    "updatedAt": "2025-05-10T06:33:27.129Z",
+    "createdAt": "2025-05-10T06:33:27.129Z"
+  }
+]

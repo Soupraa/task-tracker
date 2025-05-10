@@ -63,25 +63,31 @@ export default function DashboardsNavigator() {
           setShowModal={setShowDeleteDashboardModal}
         />
       )}
-      <div className="w-full bg-gray-300 pt-10">
-        {dashboards.map((d) => (
-          <button
-            title="right click to edit"
-            key={d.id}
-            onClick={() => handleDashboardChange(d.id)}
-            className={`${buttonStyle} ${
-              currentDashboardId === d.id ? "bg-white" : "bg-gray-200"
-            }`}
-            onContextMenu={(e) => {
-              e.preventDefault();
-              window.electronAPI?.showContextMenu(d.id);
-            }}
-          >
-            {d.title}
-          </button>
-        ))}
+      <div className="w-full bg-gray-300">
+        <h1 className="font-jersey px-2 text-xl py-1 tracking-wide">
+          OnTrack.
+        </h1>
 
-        {dashboards.length < 6 && <AddNewDashboardModal />}
+        <div className="flex overflow-x-auto no-scrollbar">
+          {dashboards.map((d) => (
+            <button
+              title="right click to edit"
+              key={d.id}
+              onClick={() => handleDashboardChange(d.id)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                window.electronAPI?.showContextMenu(d.id);
+              }}
+              className={`${buttonStyle} min-w-0 shrink px-2 py-1 truncate ${
+                currentDashboardId === d.id ? "bg-white" : "bg-gray-200"
+              }`}
+            >
+              {d.title}
+            </button>
+          ))}
+
+          {dashboards.length < 6 && <AddNewDashboardModal />}
+        </div>
       </div>
 
       {currentDashboardId && (

@@ -15,6 +15,8 @@ const useTaskStore = create((set, get) => ({
       id: Date.now().toString(),
       title: updates.title,
       text: updates.text,
+      strike: false,
+      isOpen: true,
       tags: updates.tags || [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -31,8 +33,6 @@ const useTaskStore = create((set, get) => ({
   },
 
   updateTask: (itemId, updates) => {
-    console.log("Incoming updates:", updates);
-
     set((state) => {
       const newColumns = { ...state.columns };
       let wasUpdated = false;
@@ -44,6 +44,8 @@ const useTaskStore = create((set, get) => ({
             return {
               ...item,
               ...updates,
+              strike: updates.strike ?? item.strike,
+              isOpen: updates.isOpen ?? item.isOpen,
               tags: updates.tags ?? item.tags, // preserve existing tags
               updatedAt: new Date().toISOString(),
             };

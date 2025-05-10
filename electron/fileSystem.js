@@ -10,8 +10,8 @@ const DEFAULT_DATA = [
     todo: [
       {
         id: "welcome",
-        title: "Welcome to OnTask",
-        text: "Start creating tasks, stay locked in, happy tasking :)",
+        title: "Welcome to OnTrack",
+        text: "Start creating tasks and tags, happy tasking :)",
       },
     ],
     progress: [],
@@ -24,7 +24,7 @@ const getSavePath = () => {
   if (!fs.existsSync(userDataPath)) {
     fs.mkdirSync(userDataPath, { recursive: true });
   }
-  return path.join(userDataPath, "app-data.json");
+  return path.join(__dirname, "saves/app-data.json");
 };
 
 const saveTasks = (dashboardData, columnData) => {

@@ -40,5 +40,30 @@
   "files": [
     "main.js",
     "out/**/*"
-  ]
+  ],
+  "build": {
+    "appId": "com.on.track",
+    "productName": "OnTrack",
+    "icon": "electron/icon",
+    "files": [
+      "electron/**/*",
+      "out/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "extraMetadata": {
+      "main": "electron/main.js"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
 }
